@@ -46,6 +46,8 @@ func InitializeRouter() {
 	r.HandleFunc("/logout", controllers.Logout).Methods("GET")
 	r.HandleFunc("/refresh", controllers.Refresh).Methods("GET")
 
+	r.HandleFunc("/markAttendance", controllers.MarkAttendance).Methods("POST", "OPTIONS")
+
 	fmt.Print("Server running on localhost:9000\n")
 	serverErr := http.ListenAndServe("localhost:9000", handlers.CORS(headers, methods, origins)(r))
 	if serverErr != nil {

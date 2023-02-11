@@ -15,3 +15,9 @@ type Claims struct {
 	Expires    time.Time `json:"expires"`
 	jwt.RegisteredClaims
 }
+
+// Attendance
+type AttendanceQuery struct {
+	LectureID  string `json:"lecture_id"`
+	Attendance []int  `json:"attendance"`
+}

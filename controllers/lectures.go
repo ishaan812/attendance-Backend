@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"service/database"
 
@@ -39,8 +38,7 @@ func GetLectureByID(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	params := mux.Vars(r)
 	var lecture database.Lecture
-	err := dbconn.Preload("Subject").Where("id = ?", params["id"]).First(&lecture).Error
-	fmt.Println(lecture)
+	err := dbconn.Preload("Subject").Preload("Faculty").Where("id = ?", params["id"]).First(&lecture).Error
 	if err != nil {
 		json.NewEncoder(w).Encode("Invalid ID")
 	} else {
