@@ -1,0 +1,79 @@
+package controllers
+
+import (
+	"encoding/json"
+	"fmt"
+	"net/http"
+	"service/database"
+
+	"github.com/gorilla/mux"
+)
+
+func CreateStudent(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	w.Header().Set("Content-Type", "application/json")
+	var student database.Student
+	json.NewDecoder(r.Body).Decode(&student)
+	err := dbconn.Create(&student)
+	if err != nil {
+		json.NewEncoder(w).Encode(err.Error)
+	} else {
+		json.NewEncoder(w).Encode("Student Created")
+	}
+}
+
+func GetAllStudents(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	w.Header().Set("Content-Type", "application/json")
+	var student []database.Student
+	model := dbconn.Find(&student)
+	paginated := pg.Response(model, r, &[]database.Student{})
+	json.NewEncoder(w).Encode(&paginated)
+}
+
+func GetStudentByID(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	w.Header().Set("Content-Type", "application/json")
+	params := mux.Vars(r)
+	var student database.Student
+	err := dbconn.Where("id = ?", params["id"]).First(&student).Error
+	fmt.Println(student)
+	if err != nil {
+		json.NewEncoder(w).Encode("Invalid ID")
+	} else {
+		json.NewEncoder(w).Encode(&student)
+	}
+}
+
+func DeleteStudent(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	w.Header().Set("Content-Type", "application/json")
+	var student database.Student
+	params := mux.Vars(r)
+	err := dbconn.Where("id = ?", params["id"]).First(&student).Error
+	if err != nil {
+		json.NewEncoder(w).Encode("Invalid ID")
+	} else {
+		dbconn.Delete(&student)
+		json.NewEncoder(w).Encode("Student Deleted")
+	}
+}
+
+func UpdateStudent(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	w.Header().Set("Content-Type", "application/json")
+	params := mux.Vars(r)
+	var student database.Student
+	err := dbconn.Where("id = ?", params["id"]).First(&student).Error
+	if err != nil {
+		json.NewEncoder(w).Encode("Invalid ID")
+	}
+	json.NewDecoder(r.Body).Decode(&student)
+	dbconn.Save(&student)
+	json.NewEncoder(w).Encode(&student)
+}
