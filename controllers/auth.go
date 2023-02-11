@@ -15,7 +15,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	var Faculty database.Faculty
 	json.NewDecoder(r.Body).Decode(&Faculty)
-	err := LoginUser(&Faculty)
+	faculty, err := LoginUser(&Faculty)
 	fmt.Println(Faculty)
 	if err != nil {
 		json.NewEncoder(w).Encode("AuthError")
@@ -26,7 +26,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 			json.NewEncoder(w).Encode("JWTError")
 		} else {
 			http.SetCookie(w, JWTCookie)
-			json.NewEncoder(w).Encode("LoginSuccess")
+			json.NewEncoder(w).Encode(faculty)
 		}
 	}
 }
@@ -85,4 +85,5 @@ func Logout(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	LogoutUser(c)
+	http.SetCookie(w, c)
 }

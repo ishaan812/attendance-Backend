@@ -21,3 +21,5 @@ type AttendanceQuery struct {
 	LectureID  string `json:"lecture_id"`
 	Attendance []int  `json:"attendance"`
 }
+
+

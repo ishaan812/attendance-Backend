@@ -28,9 +28,40 @@ func GetAllStudents(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 	w.Header().Set("Content-Type", "application/json")
 	var student []database.Student
-	model := dbconn.Find(&student)
-	paginated := pg.Response(model, r, &[]database.Student{})
-	json.NewEncoder(w).Encode(&paginated)
+	year := r.URL.Query().Get("year")
+	division := r.URL.Query().Get("division")
+	batch := r.URL.Query().Get("batch")
+	department := r.URL.Query().Get("department")
+	if year == "" && division == "" && batch == "" && department == "" {
+		dbconn.Find(&student)
+		json.NewEncoder(w).Encode(&student)
+	} else {
+		querystring := ""
+		if year != "" {
+			querystring += "year = " + year
+		}
+		if division != "" {
+			if querystring != "" {
+				querystring = querystring + " AND "
+			}
+			querystring = querystring + "division = '" + division + "'"
+		}
+		if batch != "" {
+			if querystring != "" {
+				querystring = querystring + " AND "
+			}
+			querystring = querystring + "batch = " + batch
+		}
+		if department != "" {
+			if querystring != "" {
+				querystring = querystring + " AND "
+			}
+			querystring = querystring + "department = '" + department + "'"
+		}
+		fmt.Println(querystring)
+		dbconn.Find(&student, querystring)
+		json.NewEncoder(w).Encode(&student)
+	}
 }
 
 func GetStudentByID(w http.ResponseWriter, r *http.Request) {

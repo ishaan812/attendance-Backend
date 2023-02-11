@@ -14,21 +14,21 @@ import (
 
 var tokenValidityDuration = 60 * 24 * time.Minute
 
-func LoginUser(Faculty *database.Faculty) error {
+func LoginUser(Faculty *database.Faculty) (*database.Faculty, error) {
 	var faculty database.Faculty
 	err := dbconn.Where("s_api_d = ?", Faculty.SAPID).First(&faculty).Error
 	if err != nil {
 		fmt.Println("ERROR: sapid does not exist")
-		return err
+		return nil, err
 	}
 	err = bcrypt.CompareHashAndPassword([]byte(faculty.Password), []byte(Faculty.Password))
 	if err != nil {
 		fmt.Println("ERROR: Wrong Password Entered")
-		return err
+		return nil, err
 	}
 	fmt.Println("INFO: ", Faculty.SAPID, " logged in")
 	Faculty = &faculty
-	return nil
+	return &faculty, nil
 }
 
 func RegisterUser(Faculty *database.Faculty) error {
@@ -50,6 +50,7 @@ func RegisterUser(Faculty *database.Faculty) error {
 
 func LogoutUser(c *http.Cookie) error {
 	fmt.Println("INFO: Logged out")
+	c.Expires = time.Now().Add(-1 * time.Hour)
 	return nil
 }
 

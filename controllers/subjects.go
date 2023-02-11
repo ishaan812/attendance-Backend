@@ -27,10 +27,12 @@ func GetAllSubjects(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 	w.Header().Set("Content-Type", "application/json")
-	var subject []database.Subject
-	model := dbconn.Find(&subject)
-	paginated := pg.Response(model, r, &[]database.Subject{})
-	json.NewEncoder(w).Encode(&paginated)
+	var subjects []database.Subject
+	err := dbconn.Find(&subjects).Error
+	if err != nil {
+		json.NewEncoder(w).Encode(err)
+	}
+	json.NewEncoder(w).Encode(&subjects)
 }
 
 func GetSubjectByID(w http.ResponseWriter, r *http.Request) {

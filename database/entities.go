@@ -14,8 +14,8 @@ type Student struct {
 	ID         uuid.UUID      `gorm:"primarykey;type:uuid;default:uuid_generate_v4()"`
 	SAPID      int            `json:"sap_id"`
 	Name       string         `json:"name"`
-	Year       int            `json:"year"`
 	Email      string         `json:"email"`
+	Year       int            `json:"year"`
 	Department string         `json:"department"`
 	Division   string         `json:"division"`
 	Batch      int            `json:"batch"`
@@ -52,7 +52,7 @@ type Lecture struct {
 	ID            uuid.UUID      `gorm:"primarykey;type:uuid;default:uuid_generate_v4()"`
 	DateOfLecture time.Time      `json:"date_of_lecture"`
 	SubjectID     uuid.UUID      `json:"subject_id"`
-	Subject       Subject        `gorm:"foreignkey:SubjectID" json:"subject"`
+	Subject       *Subject       `gorm:"foreignkey:SubjectID" json:"subject"`
 	Type          string         `json:"type"`
 	Division      string         `json:"division"`
 	Batch         int            `json:"batch"`
@@ -66,8 +66,10 @@ type StudentLecture struct {
 	DeletedAt  gorm.DeletedAt `gorm:"index"`
 	ID         uuid.UUID      `gorm:"primarykey;type:uuid;default:uuid_generate_v4()"`
 	StudentID  uuid.UUID      `json:"student_id"`
-	Student    Student        `gorm:"foreignkey:StudentID" json:"user"`
+	Student    Student        `gorm:"foreignkey:StudentID" json:"student,omitempty"`
+	SubjectID  uuid.UUID      `json:"subject_id"`
+	Subject    Subject        `gorm:"foreignkey:SubjectID" json:"subject,omitempty"`
 	LectureID  uuid.UUID      `json:"lecture_id"`
-	Lecture    Lecture        `gorm:"foreignkey:LectureID" json:"lecture"`
+	Lecture    Lecture        `gorm:"foreignkey:LectureID" json:"lecture,omitempty"`
 	Attendance bool           `json:"attendance"`
 }

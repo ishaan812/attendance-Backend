@@ -18,7 +18,7 @@ func CreateLecture(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		json.NewEncoder(w).Encode(err.Error)
 	} else {
-		json.NewEncoder(w).Encode("Lecture Created")
+		json.NewEncoder(w).Encode(&lecture)
 	}
 }
 
@@ -26,10 +26,12 @@ func GetAllLectures(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 	w.Header().Set("Content-Type", "application/json")
-	var lecture []database.Lecture
-	model := dbconn.Find(&lecture)
-	paginated := pg.Response(model, r, &[]database.Lecture{})
-	json.NewEncoder(w).Encode(&paginated)
+	var lectures []database.Lecture
+	err := dbconn.Preload("Subject").Find(&lectures).Error
+	if err != nil {
+		json.NewEncoder(w).Encode(err)
+	}
+	json.NewEncoder(w).Encode(&lectures)
 }
 
 func GetLectureByID(w http.ResponseWriter, r *http.Request) {
