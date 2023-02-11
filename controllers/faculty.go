@@ -28,9 +28,11 @@ func GetAllFaculties(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 	w.Header().Set("Content-Type", "application/json")
 	var faculty []database.Faculty
-	model := dbconn.Find(&faculty)
-	paginated := pg.Response(model, r, &[]database.Faculty{})
-	json.NewEncoder(w).Encode(&paginated)
+	err := dbconn.Find(&faculty).Error
+	if err != nil {
+		json.NewEncoder(w).Encode("No Faculties Found")
+	}
+	json.NewEncoder(w).Encode(&faculty)
 }
 
 func GetFacultyByID(w http.ResponseWriter, r *http.Request) {

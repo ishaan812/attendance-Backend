@@ -14,12 +14,11 @@ func CreateLecture(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	var lecture database.Lecture
 	json.NewDecoder(r.Body).Decode(&lecture)
-	err := dbconn.Create(&lecture)
+	err := dbconn.Create(&lecture).Error
 	if err != nil {
 		json.NewEncoder(w).Encode(err.Error)
-	} else {
-		json.NewEncoder(w).Encode(&lecture)
 	}
+	json.NewEncoder(w).Encode(&lecture)
 }
 
 func GetAllLectures(w http.ResponseWriter, r *http.Request) {
