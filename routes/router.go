@@ -40,6 +40,8 @@ func InitializeRouter() {
 	r.HandleFunc("/lecture/{id}", controllers.GetLectureByID).Methods("GET")
 	r.HandleFunc("/lecture/{id}", controllers.UpdateLecture).Methods("PUT")
 	r.HandleFunc("/lecture/{id}", controllers.DeleteLecture).Methods("DELETE")
+	r.HandleFunc("/getLecturesBySubject/{id}", controllers.GetLecturesBySubject).Methods("GET")
+	r.HandleFunc("/getLecturesByFaculty/{id}", controllers.GetLecturesByFaculty).Methods("GET")
 
 	r.HandleFunc("/register", controllers.Register).Methods("POST", "OPTIONS")
 	r.HandleFunc("/login", controllers.Login).Methods("POST", "OPTIONS")
@@ -48,7 +50,7 @@ func InitializeRouter() {
 
 	r.HandleFunc("/markAttendance", controllers.MarkAttendance).Methods("POST", "OPTIONS")
 	r.HandleFunc("/getStudentAttendance", controllers.GetStudentAttendanceReport).Methods("POST", "OPTIONS")
-	
+
 	fmt.Print("Server running on localhost:9000\n")
 	serverErr := http.ListenAndServe("localhost:9000", handlers.CORS(headers, methods, origins)(r))
 	if serverErr != nil {

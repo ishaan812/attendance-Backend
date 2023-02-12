@@ -41,6 +41,7 @@ func MarkAttendance(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// Add report generation
 func GetStudentAttendanceReport(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")

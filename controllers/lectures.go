@@ -2,9 +2,11 @@ package controllers
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"service/database"
 
+	"github.com/google/uuid"
 	"github.com/gorilla/mux"
 )
 
@@ -75,4 +77,39 @@ func UpdateLecture(w http.ResponseWriter, r *http.Request) {
 	json.NewDecoder(r.Body).Decode(&lecture)
 	dbconn.Save(&lecture)
 	json.NewEncoder(w).Encode(&lecture)
+}
+
+func GetLecturesBySubject(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	w.Header().Set("Content-Type", "application/json")
+	params := mux.Vars(r)
+	fmt.Println(params["id"])
+	subject_id, err := uuid.Parse(params["id"])
+	if err != nil {
+		json.NewEncoder(w).Encode(err)
+	}
+	var lectures []database.Lecture
+	err = dbconn.Preload("Subject").Preload("Faculty").Where("subject_id = ?", subject_id).Find(&lectures).Error
+	if err != nil {
+		json.NewEncoder(w).Encode(err)
+	}
+	json.NewEncoder(w).Encode(&lectures)
+}
+
+func GetLecturesByFaculty(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	w.Header().Set("Content-Type", "application/json")
+	params := mux.Vars(r)
+	faculty_id, err := uuid.Parse(params["id"])
+	if err != nil {
+		json.NewEncoder(w).Encode(err)
+	}
+	var lectures []database.Lecture
+	err = dbconn.Preload("Subject").Preload("Faculty").Where("faculty_id = ?", faculty_id).Find(&lectures).Error
+	if err != nil {
+		json.NewEncoder(w).Encode(err)
+	}
+	json.NewEncoder(w).Encode(&lectures)
 }
