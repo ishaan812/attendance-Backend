@@ -113,3 +113,45 @@ func GetLecturesByFaculty(w http.ResponseWriter, r *http.Request) {
 	}
 	json.NewEncoder(w).Encode(&lectures)
 }
+
+func FetchLecture(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	w.Header().Set("Content-Type", "application/json")
+	var lectures database.Lecture
+	var FetchLectureRequest FetchLectureReq
+	json.NewDecoder(r.Body).Decode(&FetchLectureRequest)
+	date_of_lecture := FetchLectureRequest.DateOfLecture
+	type1 := FetchLectureRequest.Type
+	division := FetchLectureRequest.Division
+	batch := FetchLectureRequest.Batch
+	querystring := ""
+	if date_of_lecture != "" {
+		querystring += "date_of_lecture = '" + date_of_lecture + "'"
+	}
+	if type1 != "" {
+		if querystring != "" {
+			querystring = querystring + " AND "
+		}
+		querystring = querystring + "type = '" + type1 + "'"
+	}
+	if division != "" {
+		if querystring != "" {
+			querystring = querystring + " AND "
+		}
+		querystring = querystring + "division = " + division
+	}
+	if batch != 0 {
+		if querystring != "" {
+			querystring = querystring + " AND "
+		}
+		batchstring := fmt.Sprintf("%d", batch)
+		querystring = querystring + "batch = '" + batchstring + "'"
+	}
+	fmt.Println(date_of_lecture, type1, division, batch)
+	err := dbconn.Preload("Subject").Preload("Faculty").Find(&lectures, querystring).Error
+	if err != nil {
+		json.NewEncoder(w).Encode(err)
+	}
+	json.NewEncoder(w).Encode(&lectures)
+}

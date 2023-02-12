@@ -22,4 +22,10 @@ type AttendanceQuery struct {
 	Attendance []int  `json:"attendance"`
 }
 
-
+type FetchLectureReq struct {
+	DateOfLecture string `json:"date_of_lecture"`
+	Type          string `json:"type"`
+	Division      string `json:"division"`
+	Batch         int    `json:"batch"`
+	FacultyID     string `json:"faculty_id"`
+}
