@@ -110,4 +110,3 @@ func GetSubjectByFacultyID(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(&subject)
 }
 
-//Get Subject by Faculty ID
