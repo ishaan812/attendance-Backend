@@ -22,6 +22,20 @@ type AttendanceQuery struct {
 	Attendance []int  `json:"attendance"`
 }
 
+// Student
+
+type StudentAttendanceReq struct {
+	SAPID int `json:"sap_id"`
+}
+
+type StudentAttendanceReport struct {
+	SAPID         int    `json:"student_id"`
+	StudentName   string `json:"student_name"`
+	TotalLectures int    `json:"total_lectures"`
+	Attendance    int    `json:"attendance"`
+}
+
+// Lecture
 type FetchLectureReq struct {
 	DateOfLecture string `json:"date_of_lecture"`
 	Type          string `json:"type"`

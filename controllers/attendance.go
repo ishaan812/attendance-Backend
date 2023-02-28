@@ -2,10 +2,12 @@ package controllers
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"service/database"
 
 	"github.com/google/uuid"
+	"github.com/gorilla/mux"
 )
 
 func MarkAttendance(w http.ResponseWriter, r *http.Request) {
@@ -41,23 +43,52 @@ func MarkAttendance(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// Add report generation
-func GetStudentAttendanceReport(w http.ResponseWriter, r *http.Request) {
+func GetLectureAttendance(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 	w.Header().Set("Content-Type", "application/json")
+	params := mux.Vars(r)
+	var StudentLectures []database.StudentLecture
+	json.NewDecoder(r.Body).Decode(&StudentLectures)
+	dbconn.Preload("Student").Where("lecture_id = ?", params["id"]).Find(&StudentLectures)
+	fmt.Println(StudentLectures)
+	json.NewEncoder(w).Encode(StudentLectures)
+}
+
+
+// Add report generation
+func GetAttendanceBySAPID(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	w.Header().Set("Content-Type", "application/json")
+	//Destructuring Request
+	var StudentAttendanceRequest StudentAttendanceReq
 	var Student database.Student
-	var StudentLecture []database.StudentLecture
-	// set := make(map[string]struct{})
-	// var exists = struct{}{}
-	json.NewDecoder(r.Body).Decode(&Student)
-	err := dbconn.Where("s_api_d = ?", Student.SAPID).First(&Student).Error
+	json.NewDecoder(r.Body).Decode(&StudentAttendanceRequest)
+	//Find StudentID by SAPID
+	err := dbconn.Where("s_api_d = ?", StudentAttendanceRequest.SAPID).First(&Student).Error
 	if err != nil {
-		json.NewEncoder(w).Encode("Invalid SAP ID")
+		json.NewEncoder(w).Encode("Wrong SAPID")
 	}
-	err = dbconn.Preload("Lecture").Preload("Subject").Where("student_id = ?", Student.ID).Find(&StudentLecture).Error
+	//Get Subjects for Student based on semester
+
+
+	//Find Subject by SubjectCode, Division,
+	err = dbconn.Where("subject_code = ?", StudentAttendanceRequest.SAPID).First(&Student).Error
 	if err != nil {
-		json.NewEncoder(w).Encode("Error Fetching Attendance")
+		json.NewEncoder(w).Encode("Wrong SAPID")
 	}
-	json.NewEncoder(w).Encode(&StudentLecture)
+
+// 	//Get All Lectures with that subject id
+// 	//Get count of total lectures for that subject from lecture table
+// 	//foreach lecture
+// 	//	getlectureId
+// 	//	get count of student attendance in those lectures for that student
+// 	// 	divide to get percentage
+// 	// 	append totallectures, attended lectures, attendance% to json array
+// 	//iterate json
+// 	//calculate grand total attendance
+// 	//append to json
+// 	//send json
+
 }

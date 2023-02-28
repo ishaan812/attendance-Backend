@@ -35,14 +35,17 @@ type Faculty struct {
 }
 
 type Subject struct {
-	CreatedAt  time.Time
-	UpdatedAt  time.Time
-	DeletedAt  gorm.DeletedAt `gorm:"index" json:"-"`
-	ID         uuid.UUID      `gorm:"primarykey;type:uuid;default:uuid_generate_v4()"`
-	Name       string         `json:"name"`
-	Year       int            `json:"year"`
-	Department string         `json:"department"`
-	Semester   int            `json:"semester"`
+	CreatedAt   time.Time
+	UpdatedAt   time.Time
+	DeletedAt   gorm.DeletedAt `gorm:"index" json:"-"`
+	ID          uuid.UUID      `gorm:"primarykey;type:uuid;default:uuid_generate_v4()"`
+	SubjectCode string         `json:"subject_code"`
+	Name        string         `json:"name"`
+	Year        int            `json:"year"`
+	Department  string         `json:"department"`
+	Semester    int            `json:"semester"`
+	FacultyID   uuid.UUID      `json:"faculty_id"`
+	Faculty     *Faculty       `gorm:"foreignkey:FacultyID" json:"faculty"`
 }
 
 type Lecture struct {
@@ -51,9 +54,12 @@ type Lecture struct {
 	DeletedAt     gorm.DeletedAt `gorm:"index" json:"-"`
 	ID            uuid.UUID      `gorm:"primarykey;type:uuid;default:uuid_generate_v4()"`
 	DateOfLecture string         `json:"date_of_lecture" gorm:"type:date"`
+	StartTime     string         `json:"start_time"`
+	EndTime       string         `json:"end_time"`
 	SubjectID     uuid.UUID      `json:"subject_id"`
 	Subject       *Subject       `gorm:"foreignkey:SubjectID" json:"subject"`
 	Type          string         `json:"type"`
+	Year          string         `json:"year_of_graduation"`
 	Division      string         `json:"division"`
 	Batch         int            `json:"batch"`
 	FacultyID     uuid.UUID      `json:"faculty_id"`
