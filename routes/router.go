@@ -53,7 +53,7 @@ func InitializeRouter() {
 	r.HandleFunc("/markAttendance", controllers.MarkAttendance).Methods("POST", "OPTIONS")
 	r.HandleFunc("/getLectureAttendance/{id}", controllers.GetLectureAttendance).Methods("POST", "OPTIONS")
 	r.HandleFunc("/getSubjectbyFacultyID/{id}", controllers.GetSubjectByFacultyID).Methods("GET")
-	// r.HandleFunc("/getStudentAttendance", controllers.GetAttendanceBySAPID).Methods("POST", "OPTIONS")
+	r.HandleFunc("/getStudentAttendance", controllers.GetAttendanceBySAPID).Methods("POST", "OPTIONS")
 
 	fmt.Print("Server running on localhost:9000\n")
 	serverErr := http.ListenAndServe("localhost:9000", handlers.CORS(headers, methods, origins)(r))

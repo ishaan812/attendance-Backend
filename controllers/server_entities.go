@@ -28,11 +28,20 @@ type StudentAttendanceReq struct {
 	SAPID int `json:"sap_id"`
 }
 
+// Attendance Report
 type StudentAttendanceReport struct {
-	SAPID         int    `json:"student_id"`
-	StudentName   string `json:"student_name"`
-	TotalLectures int    `json:"total_lectures"`
-	Attendance    int    `json:"attendance"`
+	SAPID             int                 `json:"student_id"`
+	StudentName       string              `json:"student_name"`
+	SubjectAttendance []SubjectAttendance `json: "subject_attendance"`
+	GrandAttendance   int                 `json: "grand_attendance"`
+}
+
+type SubjectAttendance struct {
+	SubjectName      string `json: "subject_name"`
+	SubjectCode      string `json:"subject_code"`
+	TotalLectures    int    `json: "total_lectures"`
+	AttendedLectures int    `json: "attended_lectures"`
+	Attendance       int    `json: "attendance"`
 }
 
 // Lecture

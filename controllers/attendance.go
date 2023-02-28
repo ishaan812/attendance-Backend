@@ -55,7 +55,6 @@ func GetLectureAttendance(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(StudentLectures)
 }
 
-
 // Add report generation
 func GetAttendanceBySAPID(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
@@ -70,25 +69,48 @@ func GetAttendanceBySAPID(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		json.NewEncoder(w).Encode("Wrong SAPID")
 	}
-	//Get Subjects for Student based on semester
-
-
-	//Find Subject by SubjectCode, Division,
-	err = dbconn.Where("subject_code = ?", StudentAttendanceRequest.SAPID).First(&Student).Error
+	//Get Subjects for Student based on year
+	var Subjects []database.Subject
+	err = dbconn.Where("year = ?", Student.Year).Find(&Subjects).Error
 	if err != nil {
-		json.NewEncoder(w).Encode("Wrong SAPID")
+		json.NewEncoder(w).Encode("Wrong year")
 	}
+	// print(Subjects[0].Name)
 
-// 	//Get All Lectures with that subject id
-// 	//Get count of total lectures for that subject from lecture table
-// 	//foreach lecture
-// 	//	getlectureId
-// 	//	get count of student attendance in those lectures for that student
-// 	// 	divide to get percentage
-// 	// 	append totallectures, attended lectures, attendance% to json array
-// 	//iterate json
-// 	//calculate grand total attendance
-// 	//append to json
-// 	//send json
+	var Report StudentAttendanceReport
+	var SubAttendances []int
+	Report.SAPID = Student.SAPID
+	Report.StudentName = Student.Name
 
+	for i := 0; i < len(Subjects); i++ {
+		var SubAttendance SubjectAttendance
+		SubAttendance.SubjectName = Subjects[i].Name
+		SubAttendance.SubjectCode = Subjects[i].SubjectCode
+		var TotalLectures []database.StudentLecture
+		var AttendedLectures []database.StudentLecture
+		err := dbconn.Preload("Lecture").Where("subject_id = ?", Subjects[i].ID).Find(&TotalLectures).Error
+		if err != nil {
+			fmt.Println(err)
+		}
+		SubAttendance.TotalLectures = len(TotalLectures)
+		err = dbconn.Preload("Lecture").Where("student_id = ? AND subject_id = ?", Student.ID, Subjects[i].ID).Find(&AttendedLectures).Error
+		if err != nil {
+			fmt.Println(err)
+		}
+		SubAttendance.AttendedLectures = len(AttendedLectures)
+		SubAttendance.Attendance = (SubAttendance.AttendedLectures / SubAttendance.TotalLectures) * 100
+		SubAttendances = append(SubAttendances, SubAttendance.Attendance)
+		Report.SubjectAttendance = append(Report.SubjectAttendance, SubAttendance)
+	}
+	var res int
+	for i := 0; i < len(SubAttendances); i++ {
+		res += SubAttendances[i]
+	}
+	Report.GrandAttendance = res / len(Subjects)
+
+	json.NewEncoder(w).Encode(&Report)
+	// 	// 	append totallectures, attended lectures, attendance% to json array
+	// 	//	calculate grand total attendance
+	// 	//	append to json
+	// 	//	send json
 }
