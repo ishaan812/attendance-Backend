@@ -50,7 +50,7 @@ type Lecture struct {
 	UpdatedAt     time.Time
 	DeletedAt     gorm.DeletedAt `gorm:"index" json:"-"`
 	ID            uuid.UUID      `gorm:"primarykey;type:uuid;default:uuid_generate_v4()"`
-	DateOfLecture string         `json:"date_of_lecture" gorm:"type:date"`
+	DateOfLecture time.Time         `json:"date_of_lecture" gorm:"type:date"`
 	SubjectID     uuid.UUID      `json:"subject_id"`
 	Subject       *Subject       `gorm:"foreignkey:SubjectID" json:"subject"`
 	Type          string         `json:"type"`
