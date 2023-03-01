@@ -34,6 +34,7 @@ func InitializeRouter() {
 	r.HandleFunc("/subject/{id}", controllers.GetSubjectByID).Methods("GET")
 	r.HandleFunc("/subject/{id}", controllers.UpdateSubject).Methods("PUT")
 	r.HandleFunc("/subject/{id}", controllers.DeleteSubject).Methods("DELETE")
+	r.HandleFunc("/subject/{code}", controllers.GetSubjectBySubjectCode).Methods("GET")
 
 	r.HandleFunc("/lecture", controllers.CreateLecture).Methods("POST", "OPTIONS")
 	r.HandleFunc("/getAllLectures", controllers.GetAllLectures).Methods("GET")
@@ -50,7 +51,9 @@ func InitializeRouter() {
 	r.HandleFunc("/refresh", controllers.Refresh).Methods("GET")
 
 	r.HandleFunc("/markAttendance", controllers.MarkAttendance).Methods("POST", "OPTIONS")
-	r.HandleFunc("/getStudentAttendance", controllers.GetStudentAttendanceReport).Methods("POST", "OPTIONS")
+	r.HandleFunc("/getLectureAttendance/{id}", controllers.GetLectureAttendance).Methods("POST", "OPTIONS")
+	r.HandleFunc("/getSubjectbyFacultyID/{id}", controllers.GetSubjectByFacultyID).Methods("GET")
+	r.HandleFunc("/getStudentAttendance", controllers.GetAttendanceBySAPID).Methods("POST", "OPTIONS")
 
 	fmt.Print("Server running on localhost:9000\n")
 	serverErr := http.ListenAndServe("localhost:9000", handlers.CORS(headers, methods, origins)(r))

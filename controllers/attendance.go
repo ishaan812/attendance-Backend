@@ -2,10 +2,12 @@ package controllers
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"service/database"
 
 	"github.com/google/uuid"
+	"github.com/gorilla/mux"
 )
 
 func MarkAttendance(w http.ResponseWriter, r *http.Request) {
@@ -41,23 +43,74 @@ func MarkAttendance(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// Add report generation
-func GetStudentAttendanceReport(w http.ResponseWriter, r *http.Request) {
+func GetLectureAttendance(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 	w.Header().Set("Content-Type", "application/json")
+	params := mux.Vars(r)
+	var StudentLectures []database.StudentLecture
+	json.NewDecoder(r.Body).Decode(&StudentLectures)
+	dbconn.Preload("Student").Where("lecture_id = ?", params["id"]).Find(&StudentLectures)
+	fmt.Println(StudentLectures)
+	json.NewEncoder(w).Encode(StudentLectures)
+}
+
+// Add report generation
+func GetAttendanceBySAPID(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	w.Header().Set("Content-Type", "application/json")
+	//Destructuring Request
+	var StudentAttendanceRequest StudentAttendanceReq
 	var Student database.Student
-	var StudentLecture []database.StudentLecture
-	// set := make(map[string]struct{})
-	// var exists = struct{}{}
-	json.NewDecoder(r.Body).Decode(&Student)
-	err := dbconn.Where("s_api_d = ?", Student.SAPID).First(&Student).Error
+	json.NewDecoder(r.Body).Decode(&StudentAttendanceRequest)
+	//Find StudentID by SAPID
+	err := dbconn.Where("s_api_d = ?", StudentAttendanceRequest.SAPID).First(&Student).Error
 	if err != nil {
-		json.NewEncoder(w).Encode("Invalid SAP ID")
+		json.NewEncoder(w).Encode("Wrong SAPID")
 	}
-	err = dbconn.Preload("Lecture").Preload("Subject").Where("student_id = ?", Student.ID).Find(&StudentLecture).Error
+	//Get Subjects for Student based on year
+	var Subjects []database.Subject
+	err = dbconn.Where("year = ?", Student.Year).Find(&Subjects).Error
 	if err != nil {
-		json.NewEncoder(w).Encode("Error Fetching Attendance")
+		json.NewEncoder(w).Encode("Wrong year")
 	}
-	json.NewEncoder(w).Encode(&StudentLecture)
+	// print(Subjects[0].Name)
+
+	var Report StudentAttendanceReport
+	var SubAttendances []int
+	Report.SAPID = Student.SAPID
+	Report.StudentName = Student.Name
+
+	for i := 0; i < len(Subjects); i++ {
+		var SubAttendance SubjectAttendance
+		SubAttendance.SubjectName = Subjects[i].Name
+		SubAttendance.SubjectCode = Subjects[i].SubjectCode
+		var TotalLectures []database.StudentLecture
+		var AttendedLectures []database.StudentLecture
+		err := dbconn.Preload("Lecture").Where("subject_id = ?", Subjects[i].ID).Find(&TotalLectures).Error
+		if err != nil {
+			fmt.Println(err)
+		}
+		SubAttendance.TotalLectures = len(TotalLectures)
+		err = dbconn.Preload("Lecture").Where("student_id = ? AND subject_id = ?", Student.ID, Subjects[i].ID).Find(&AttendedLectures).Error
+		if err != nil {
+			fmt.Println(err)
+		}
+		SubAttendance.AttendedLectures = len(AttendedLectures)
+		SubAttendance.Attendance = (SubAttendance.AttendedLectures / SubAttendance.TotalLectures) * 100
+		SubAttendances = append(SubAttendances, SubAttendance.Attendance)
+		Report.SubjectAttendance = append(Report.SubjectAttendance, SubAttendance)
+	}
+	var res int
+	for i := 0; i < len(SubAttendances); i++ {
+		res += SubAttendances[i]
+	}
+	Report.GrandAttendance = res / len(Subjects)
+
+	json.NewEncoder(w).Encode(&Report)
+	// 	// 	append totallectures, attended lectures, attendance% to json array
+	// 	//	calculate grand total attendance
+	// 	//	append to json
+	// 	//	send json
 }
