@@ -1,13 +1,4 @@
 package main
-
-//	@title			Weber API
-//	@version		1.001
-//	@description	Weber Backend API
-
-//	@host						localhost:9000
-//	@BasePath					/
-//	@query.collection.format	json
-
 import (
 	"os"
 	"service/controllers"
