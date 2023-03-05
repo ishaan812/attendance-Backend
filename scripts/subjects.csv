@@ -1,5 +1,5 @@
-﻿name,year,department,semester
-DWM,3,IT,5
-IACV,3,IT,6
-UI/UX,3,IT,6
-CNS,3,IT,5
+﻿name,year,department,semester,faculty_id
+DWM,3,IT,5,cbd035b9-0324-454e-9c89-7eadcb41c2ac
+IACV,3,IT,6,cbd035b9-0324-454e-9c89-7eadcb41c2ac
+UI/UX,3,IT,6,cbd035b9-0324-454e-9c89-7eadcb41c2ac
+CNS,3,IT,5,cbd035b9-0324-454e-9c89-7eadcb41c2ac

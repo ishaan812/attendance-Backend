@@ -9,7 +9,7 @@ def get_db_conn():
         host="localhost",
         database="attendance",
         user="postgres", # Replace postgres user name
-        password="bhavyagor123") # Postgres password
+        password="hibye123") # Postgres password
     return conn
 
 def cleanup_all_tables(db_conn, table_list):
@@ -54,5 +54,5 @@ def read_csv():
 
 if __name__ == "__main__":
     db_conn = get_db_conn()
-    cleanup_all_tables(db_conn, ["students"])
+    # cleanup_all_tables(db_conn, ["students"])
     read_csv()

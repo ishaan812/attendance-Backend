@@ -72,9 +72,9 @@ type StudentLecture struct {
 	ID         uuid.UUID      `gorm:"index;type:uuid;default:uuid_generate_v4()"`
 	StudentID  uuid.UUID      `gorm:"primarykey" json:"student_id"`
 	Student    Student        `gorm:"foreignkey:StudentID" json:"student,omitempty"`
-	SubjectID  uuid.UUID      `gorm:"primarykey" json:"subject_id"`
+	SubjectID  uuid.UUID      `json:"subject_id"`
 	Subject    Subject        `gorm:"foreignkey:SubjectID" json:"subject,omitempty"`
-	LectureID  uuid.UUID      `json:"lecture_id"`
+	LectureID  uuid.UUID      `gorm:"primarykey" json:"lecture_id"`
 	Lecture    Lecture        `gorm:"foreignkey:LectureID" json:"lecture,omitempty"`
 	Attendance bool           `json:"attendance"`
 }
