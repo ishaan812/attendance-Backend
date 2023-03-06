@@ -75,7 +75,7 @@ func GetAttendanceBySAPID(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		json.NewEncoder(w).Encode("Wrong year")
 	}
-	// print(Subjects[0].Name)
+	print(Subjects[1].ID)
 
 	var Report StudentAttendanceReport
 	var SubAttendances []int
@@ -98,9 +98,13 @@ func GetAttendanceBySAPID(w http.ResponseWriter, r *http.Request) {
 			fmt.Println(err)
 		}
 		SubAttendance.AttendedLectures = len(AttendedLectures)
-		SubAttendance.Attendance = (SubAttendance.AttendedLectures / SubAttendance.TotalLectures) * 100
-		SubAttendances = append(SubAttendances, SubAttendance.Attendance)
-		Report.SubjectAttendance = append(Report.SubjectAttendance, SubAttendance)
+		if SubAttendance.TotalLectures == 0 {
+			json.NewEncoder(w).Encode("No Lectures for this subject")
+		} else {
+			SubAttendance.Attendance = (SubAttendance.AttendedLectures / SubAttendance.TotalLectures) * 100
+			SubAttendances = append(SubAttendances, SubAttendance.Attendance)
+			Report.SubjectAttendance = append(Report.SubjectAttendance, SubAttendance)
+		}
 	}
 	var res int
 	for i := 0; i < len(SubAttendances); i++ {

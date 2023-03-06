@@ -18,6 +18,7 @@ require (
 require (
 	github.com/andybalholm/brotli v1.0.4 // indirect
 	github.com/aws/smithy-go v1.13.5 // indirect
+	github.com/fatih/structs v1.1.0 // indirect
 	github.com/felixge/httpsnoop v1.0.1 // indirect
 	github.com/iancoleman/strcase v0.1.3 // indirect
 	github.com/jackc/chunkreader/v2 v2.0.1 // indirect
