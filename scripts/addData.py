@@ -9,7 +9,7 @@ def get_db_conn():
         host="localhost",
         database="attendance",
         user="postgres", # Replace postgres user name
-        password="hibye123") # Postgres password
+        password="bhavya") # Postgres password
     return conn
 
 def cleanup_all_tables(db_conn, table_list):
@@ -42,7 +42,7 @@ def add_data_to_database(record, table_name):
     db_conn.commit()
                 
 def read_csv():
-    table_name = 'students'
+    table_name = 'subjects'
     with open('./scripts/'+table_name+'.csv', 'r', encoding='utf-8-sig') as file:
         dict_reader = DictReader(file)
         records = list(dict_reader)
@@ -54,5 +54,5 @@ def read_csv():
 
 if __name__ == "__main__":
     db_conn = get_db_conn()
-    # cleanup_all_tables(db_conn, ["students"])
+    cleanup_all_tables(db_conn, ["subjects"])
     read_csv()
