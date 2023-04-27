@@ -33,15 +33,16 @@ type StudentAttendanceReport struct {
 	SAPID             int                 `json:"student_id"`
 	StudentName       string              `json:"student_name"`
 	SubjectAttendance []SubjectAttendance `json: "subject_attendance"`
-	GrandAttendance   int                 `json: "grand_attendance"`
+	GrandAttendance   float64             `json: "grand_attendance"`
+	Status            string              `json: "defaulter"`
 }
 
 type SubjectAttendance struct {
-	SubjectName      string `json: "subject_name"`
-	SubjectCode      string `json:"subject_code"`
-	TotalLectures    int    `json: "total_lectures"`
-	AttendedLectures int    `json: "attended_lectures"`
-	Attendance       int    `json: "attendance"`
+	SubjectName      string  `json: "subject_name"`
+	SubjectCode      string  `json:"subject_code"`
+	TotalLectures    int     `json: "total_lectures"`
+	AttendedLectures int     `json: "attended_lectures"`
+	Attendance       float64 `json: "attendance"`
 }
 
 // Lecture

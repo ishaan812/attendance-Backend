@@ -34,10 +34,11 @@ func MarkAttendance(w http.ResponseWriter, r *http.Request) {
 		StudentLecture.StudentID = Student.ID
 		StudentLecture.SubjectID = Lecture.SubjectID
 		StudentLecture.Attendance = true
-		err = dbconn.Create(&StudentLecture).Error
+		err = dbconn.FirstOrCreate(&StudentLecture).Error
 		if err != nil {
 			json.NewEncoder(w).Encode(err)
 		} else {
+			dbconn.Save(&StudentLecture)
 			json.NewEncoder(w).Encode("Attendance Marked")
 		}
 	}
@@ -75,10 +76,9 @@ func GetAttendanceBySAPID(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		json.NewEncoder(w).Encode("Wrong year")
 	}
-	print(Subjects[1].ID)
 
 	var Report StudentAttendanceReport
-	var SubAttendances []int
+	var SubAttendances []float64
 	Report.SAPID = Student.SAPID
 	Report.StudentName = Student.Name
 
@@ -101,20 +101,28 @@ func GetAttendanceBySAPID(w http.ResponseWriter, r *http.Request) {
 		if SubAttendance.TotalLectures == 0 {
 			json.NewEncoder(w).Encode("No Lectures for this subject")
 		} else {
-			SubAttendance.Attendance = (SubAttendance.AttendedLectures / SubAttendance.TotalLectures) * 100
+			if SubAttendance.TotalLectures != 0 {
+				SubAttendance.Attendance =  (float64(SubAttendance.AttendedLectures) / float64(SubAttendance.TotalLectures)) * 100 
+			} else {
+				SubAttendance.Attendance = 0
+			}
 			SubAttendances = append(SubAttendances, SubAttendance.Attendance)
 			Report.SubjectAttendance = append(Report.SubjectAttendance, SubAttendance)
 		}
 	}
-	var res int
+	var res float64
 	for i := 0; i < len(SubAttendances); i++ {
 		res += SubAttendances[i]
 	}
-	Report.GrandAttendance = res / len(Subjects)
-
-	json.NewEncoder(w).Encode(&Report)
-	// 	// 	append totallectures, attended lectures, attendance% to json array
-	// 	//	calculate grand total attendance
-	// 	//	append to json
-	// 	//	send json
+	if(len(Subjects)!=0){ 
+		Report.GrandAttendance = res / float64(len(Subjects))
+		if(Report.GrandAttendance < 75){
+			Report.Status = "Defaulter"
+		} else {
+			Report.Status = "Eligible"
+		}
+		json.NewEncoder(w).Encode(&Report)
+	} else {
+		json.NewEncoder(w).Encode("No Subjects")
+	}
 }
