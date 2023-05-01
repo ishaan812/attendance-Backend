@@ -37,6 +37,17 @@ type StudentAttendanceReport struct {
 	Status            string              `json: "defaulter"`
 }
 
+type DivisionReport struct {
+	Year           int                       `json: "year"`
+	Division       string                    `json: "division"`
+	AttendanceList []StudentAttendanceReport `json: "students"`
+}
+
+type ClassAttendanceReq struct {
+	Year     int    `json:"year"`
+	Division string `json:"division"`
+}
+
 type SubjectAttendance struct {
 	SubjectName      string  `json: "subject_name"`
 	SubjectCode      string  `json:"subject_code"`

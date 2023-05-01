@@ -13,10 +13,5 @@ func GetStudentAttendance(Student *database.Student) (*StudentAttendanceReport, 
 	}
 	Result.SAPID = Student.SAPID
 	Result.StudentName = Student.Name
-
-	
-
-	
-
 	return &Result, nil
 }

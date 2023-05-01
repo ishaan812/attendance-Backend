@@ -126,3 +126,82 @@ func GetAttendanceBySAPID(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode("No Subjects")
 	}
 }
+
+
+//input: year and division
+//output: list of students with their attendance in different subjects
+
+func GetAttendanceByYearandDivision(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	w.Header().Set("Content-Type", "application/json")
+	var ClassAttendanceRequest ClassAttendanceReq
+	json.NewDecoder(r.Body).Decode(&ClassAttendanceRequest)
+	var Students []database.Student
+	var Subjects []database.Subject	
+	//get list of students
+	err := dbconn.Where("year = ? AND division = ?", ClassAttendanceRequest.Year, ClassAttendanceRequest.Division).Find(&Students).Error
+	if err != nil {
+		json.NewEncoder(w).Encode("Wrong year or division")
+	}
+	//get list of subjects
+	err = dbconn.Where("year = ?", ClassAttendanceRequest.Year).Find(&Subjects).Error
+	if err != nil {
+		json.NewEncoder(w).Encode("Wrong year")
+	}
+	var Report DivisionReport
+	Report.Year = ClassAttendanceRequest.Year
+	Report.Division = ClassAttendanceRequest.Division
+	//get attendance of each student in each subject
+	for i := 0; i < len(Students); i++ {
+		var StudentReport StudentAttendanceReport
+		var SubAttendances []float64
+		StudentReport.SAPID = Students[i].SAPID
+		StudentReport.StudentName = Students[i].Name
+		for j := 0; j < len(Subjects); j++ {
+			var SubAttendance SubjectAttendance
+			SubAttendance.SubjectName = Subjects[j].Name
+			SubAttendance.SubjectCode = Subjects[j].SubjectCode
+			var TotalLectures []database.StudentLecture
+			var AttendedLectures []database.StudentLecture
+			err := dbconn.Preload("Lecture").Where("subject_id = ?", Subjects[j].ID).Find(&TotalLectures).Error
+			if err != nil {
+				fmt.Println(err)
+			}
+			SubAttendance.TotalLectures = len(TotalLectures)
+			err = dbconn.Preload("Lecture").Where("student_id = ? AND subject_id = ?", Students[i].ID, Subjects[j].ID).Find(&AttendedLectures).Error
+			if err != nil {
+				fmt.Println(err)
+			}
+			SubAttendance.AttendedLectures = len(AttendedLectures)
+			if SubAttendance.TotalLectures == 0 {
+				json.NewEncoder(w).Encode("No Lectures for this subject")
+			} else {
+				if SubAttendance.TotalLectures != 0 {
+					SubAttendance.Attendance =  (float64(SubAttendance.AttendedLectures) / float64(SubAttendance.TotalLectures)) * 100 
+				} else {
+					SubAttendance.Attendance = 0
+				}
+				SubAttendances = append(SubAttendances, SubAttendance.Attendance)
+				StudentReport.SubjectAttendance = append(StudentReport.SubjectAttendance, SubAttendance)
+			}
+		}
+		var res float64
+		for i := 0; i < len(SubAttendances); i++ {
+			res += SubAttendances[i]
+		}
+		if(len(Subjects)!=0){ 
+			StudentReport.GrandAttendance = res / float64(len(Subjects))
+			if(StudentReport.GrandAttendance < 75){
+				StudentReport.Status = "Defaulter"
+			} else {
+				StudentReport.Status = "Eligible"
+			}
+		} else {
+			json.NewEncoder(w).Encode("No Subjects")
+		}
+		Report.AttendanceList = append(Report.AttendanceList, StudentReport)
+	}
+	json.NewEncoder(w).Encode(&Report)
+}
+

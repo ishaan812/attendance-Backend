@@ -6,7 +6,6 @@ import (
 	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
-
 type Student struct {
 	CreatedAt  time.Time
 	UpdatedAt  time.Time
