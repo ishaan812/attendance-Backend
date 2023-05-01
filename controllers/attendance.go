@@ -175,12 +175,14 @@ func GetAttendanceByYearandDivision(w http.ResponseWriter, r *http.Request) {
 			}
 			SubAttendance.AttendedLectures = len(AttendedLectures)
 			if SubAttendance.TotalLectures == 0 {
-				json.NewEncoder(w).Encode("No Lectures for this subject")
+				SubAttendance.Attendance = 100
+				SubAttendances = append(SubAttendances, SubAttendance.Attendance)
+				StudentReport.SubjectAttendance = append(StudentReport.SubjectAttendance, SubAttendance)
 			} else {
 				if SubAttendance.TotalLectures != 0 {
 					SubAttendance.Attendance = (float64(SubAttendance.AttendedLectures) / float64(SubAttendance.TotalLectures)) * 100
 				} else {
-					SubAttendance.Attendance = 0
+					SubAttendance.Attendance = 100
 				}
 				SubAttendances = append(SubAttendances, SubAttendance.Attendance)
 				StudentReport.SubjectAttendance = append(StudentReport.SubjectAttendance, SubAttendance)
