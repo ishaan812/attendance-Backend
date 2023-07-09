@@ -58,6 +58,7 @@ func InitializeRouter() {
 
 	fmt.Print("Server running on localhost:9000\n")
 	serverErr := http.ListenAndServe("localhost:9000", handlers.CORS(headers, methods, origins)(r))
+	// serverErr := http.ListenAndServe("192.168.155.165:9000", handlers.CORS(headers, methods, origins)(r))
 	if serverErr != nil {
 		log.Fatal(serverErr)
 	}
