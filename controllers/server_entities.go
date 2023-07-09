@@ -46,6 +46,7 @@ type DivisionReport struct {
 type ClassAttendanceReq struct {
 	Year     int    `json:"year"`
 	Division string `json:"division"`
+	Type     string `json:"type"`
 }
 
 type SubjectAttendance struct {
