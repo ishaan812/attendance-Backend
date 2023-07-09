@@ -207,7 +207,7 @@ func GetAttendanceByYearandDivision(w http.ResponseWriter, r *http.Request) {
 		}
 		Report.AttendanceList = append(Report.AttendanceList, StudentReport)
 	}
-	json.NewEncoder(w).Encode(&Students)
-	json.NewEncoder(w).Encode(&Subjects)
+	// json.NewEncoder(w).Encode(&Students)
+	// json.NewEncoder(w).Encode(&Subjects)
 	json.NewEncoder(w).Encode(&Report)
 }
