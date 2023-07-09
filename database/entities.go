@@ -69,8 +69,8 @@ type StudentLecture struct {
 	CreatedAt  time.Time
 	UpdatedAt  time.Time
 	DeletedAt  gorm.DeletedAt `gorm:"index"`
-	ID         uuid.UUID      `gorm:"index;type:uuid;default:uuid_generate_v4()"`
-	StudentID  uuid.UUID      `gorm:"primarykey" json:"student_id"`
+	ID         uuid.UUID      `gorm:"index;type:uuid;default:uuid_generate_v4()" json:"id,omitempty"`
+	StudentID  uuid.UUID      `gorm:"primarykey" json:"student_id,omitempty"`
 	Student    Student        `gorm:"foreignkey:StudentID" json:"student,omitempty"`
 	SubjectID  uuid.UUID      `json:"subject_id"`
 	Subject    Subject        `gorm:"foreignkey:SubjectID" json:"subject,omitempty"`

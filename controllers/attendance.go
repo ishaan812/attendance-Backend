@@ -51,9 +51,12 @@ func GetLectureAttendance(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	var StudentLectures []database.StudentLecture
 	json.NewDecoder(r.Body).Decode(&StudentLectures)
-	dbconn.Preload("Student").Where("lecture_id = ?", params["id"]).Find(&StudentLectures)
-	fmt.Println(StudentLectures)
-	json.NewEncoder(w).Encode(StudentLectures)
+	dbconn.Select("student_id").Preload("Student").Where("lecture_id = ?", params["id"]).Find(&StudentLectures)
+	var StudentAttendance []int
+	for i := 0; i < len(StudentLectures); i++ {
+		StudentAttendance = append(StudentAttendance, StudentLectures[i].Student.SAPID)
+	}
+	json.NewEncoder(w).Encode(StudentAttendance)
 }
 
 // Add report generation
