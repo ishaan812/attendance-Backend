@@ -38,23 +38,27 @@ type StudentAttendanceReport struct {
 }
 
 type DivisionReport struct {
-	Year           int                       `json: "year"`
-	Division       string                    `json: "division"`
-	AttendanceList []StudentAttendanceReport `json: "students"`
+	Year           int                       `json:"year"`
+	Division       string                    `json:"division"`
+	StartDate      time.Time                 `json:"start_date"`
+	EndDate        time.Time                 `json:"end_date"`
+	AttendanceList []StudentAttendanceReport `json:"students"`
 }
 
 type ClassAttendanceReq struct {
-	Year     int    `json:"year"`
-	Division string `json:"division"`
-	Type     string `json:"type"`
+	Year      int    `json:"year"`
+	Division  string `json:"division"`
+	Type      string `json:"type"`
+	StartDate string `json:"start_date"`
+	EndDate   string `json:"end_date"`
 }
 
 type SubjectAttendance struct {
-	SubjectName      string  `json: "subject_name"`
+	SubjectName      string  `json:"subject_name"`
 	SubjectCode      string  `json:"subject_code"`
-	TotalLectures    int     `json: "total_lectures"`
-	AttendedLectures int     `json: "attended_lectures"`
-	Attendance       float64 `json: "attendance"`
+	TotalLectures    int     `json:"total_lectures"`
+	AttendedLectures int     `json:"attended_lectures"`
+	Attendance       float64 `json:"attendance"`
 }
 
 // Lecture

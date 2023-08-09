@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"service/database"
+	"time"
 
 	"github.com/google/uuid"
 	"github.com/gorilla/mux"
@@ -130,19 +131,19 @@ func GetAttendanceBySAPID(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-//input: year and division
-//output: list of students with their attendance in different subjects
-
+// input: year and division
+// output: list of students with their attendance in different subjects
 func GetAttendanceByYearandDivision(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 	w.Header().Set("Content-Type", "application/json")
+	var err error
 	var ClassAttendanceRequest ClassAttendanceReq
 	json.NewDecoder(r.Body).Decode(&ClassAttendanceRequest)
 	var Students []database.Student
 	var Subjects []database.Subject
 	//get list of students
-	err := dbconn.Where("year = ? AND division = ?", ClassAttendanceRequest.Year, ClassAttendanceRequest.Division).Find(&Students).Error
+	err = dbconn.Where("year = ? AND division = ?", ClassAttendanceRequest.Year, ClassAttendanceRequest.Division).Find(&Students).Error
 	if err != nil {
 		json.NewEncoder(w).Encode("Wrong year or division")
 	}
@@ -154,6 +155,16 @@ func GetAttendanceByYearandDivision(w http.ResponseWriter, r *http.Request) {
 	var Report DivisionReport
 	Report.Year = ClassAttendanceRequest.Year
 	Report.Division = ClassAttendanceRequest.Division
+	Report.StartDate, err = time.Parse("2006-01-02", ClassAttendanceRequest.StartDate)
+	if err != nil {
+		http.Error(w, "Invalid start date format", http.StatusBadRequest)
+		return
+	}
+	Report.EndDate, err = time.Parse("2006-01-02", ClassAttendanceRequest.EndDate)
+	if err != nil {
+		http.Error(w, "Invalid end date format", http.StatusBadRequest)
+		return
+	}
 	//get attendance of each student in each subject
 	for i := 0; i < len(Students); i++ {
 		var StudentReport StudentAttendanceReport
@@ -166,13 +177,22 @@ func GetAttendanceByYearandDivision(w http.ResponseWriter, r *http.Request) {
 			SubAttendance.SubjectCode = Subjects[j].SubjectCode
 			var TotalLectures []database.StudentLecture
 			var AttendedLectures []database.StudentLecture
-			err := dbconn.Preload("Lecture").Select("DISTINCT lecture_id").Where("subject_id = ?", Subjects[j].ID).Find(&TotalLectures).Error
+			// err := dbconn.Model(&database.StudentLecture).Joins().Select("DISTINCT lecture_id").Where("subject_id = ? AND lecture.date_of_lecture BETWEEN ? AND ?", Subjects[j].ID, Report.StartDate, Report.EndDate).Find(&TotalLectures).Error
+			err := dbconn.Table("student_lectures").
+				Joins("JOIN lectures ON student_lectures.lecture_id = lectures.id").
+				Select("DISTINCT student_lectures.lecture_id").
+				Where("student_lectures.subject_id = ? AND lectures.date_of_lecture BETWEEN ? AND ?", Subjects[j].ID, Report.StartDate, Report.EndDate).
+				Find(&TotalLectures).Error
 			if err != nil {
 				fmt.Println(err)
 			}
 
 			SubAttendance.TotalLectures = len(TotalLectures)
-			err = dbconn.Preload("Lecture").Where("student_id = ? AND subject_id = ?", Students[i].ID, Subjects[j].ID).Find(&AttendedLectures).Error
+			err = dbconn.Table("student_lectures").
+				Joins("JOIN lectures ON student_lectures.lecture_id = lectures.id").
+				Where("student_lectures.student_id = ? AND student_lectures.subject_id = ? AND lectures.date_of_lecture BETWEEN ? AND ?", Students[i].ID, Subjects[j].ID, Report.StartDate, Report.EndDate).
+				Find(&AttendedLectures).Error
+			// err = dbconn.Preload("Lecture").Where("student_id = ? AND subject_id = ?", Students[i].ID, Subjects[j].ID).Find(&AttendedLectures).Error
 			if err != nil {
 				fmt.Println(err)
 			}
@@ -194,9 +214,7 @@ func GetAttendanceByYearandDivision(w http.ResponseWriter, r *http.Request) {
 
 		var res float64
 		for i := 0; i < len(SubAttendances); i++ {
-
 			res += SubAttendances[i]
-
 		}
 		if len(Subjects) != 0 {
 			StudentReport.GrandAttendance = res / float64(len(Subjects))
