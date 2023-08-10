@@ -40,6 +40,7 @@ type StudentAttendanceReport struct {
 
 type DivisionReport struct {
 	Year           int                       `json:"year"`
+	Subjects       []string                  `json:"subjects"`
 	Division       string                    `json:"division"`
 	StartDate      time.Time                 `json:"start_date"`
 	EndDate        time.Time                 `json:"end_date"`

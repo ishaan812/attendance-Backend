@@ -152,9 +152,14 @@ func GetAttendanceByYearandDivision(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		json.NewEncoder(w).Encode("Wrong year")
 	}
+	SubjectNames := []string{}
+	for i := 0; i < len(Subjects); i++ {
+		SubjectNames = append(SubjectNames, Subjects[i].Name)
+	}
 	var Report DivisionReport
 	Report.Year = ClassAttendanceRequest.Year
 	Report.Division = ClassAttendanceRequest.Division
+	Report.Subjects = SubjectNames
 	Report.StartDate, err = time.Parse("2006-01-02", ClassAttendanceRequest.StartDate)
 	if err != nil {
 		http.Error(w, "Invalid start date format", http.StatusBadRequest)
