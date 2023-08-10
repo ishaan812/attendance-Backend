@@ -21,8 +21,8 @@ func InitializeRouter() {
 	r.HandleFunc("/getAllStudents", controllers.GetAllStudents).Methods("GET")
 	r.HandleFunc("/student/{id}", controllers.GetStudentByID).Methods("GET")
 	r.HandleFunc("/student/{id}", controllers.UpdateStudent).Methods("PUT")
-	r.HandleFunc("/student/{id}", controllers.DeleteStudent).Methods("DELETE")
-
+	r.HandleFunc("/student/{id}", controllers.DeleteStudent).Methods("DELETE")	
+	
 	r.HandleFunc("/faculty", controllers.CreateFaculty).Methods("POST", "OPTIONS")
 	r.HandleFunc("/getAllFaculties", controllers.GetAllFaculties).Methods("GET")
 	r.HandleFunc("/faculty/{id}", controllers.GetFacultyByID).Methods("GET")

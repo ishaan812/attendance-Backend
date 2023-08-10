@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/lib/pq"
 	"gorm.io/gorm"
 )
 
@@ -20,6 +21,7 @@ type Student struct {
 	Division   string         `json:"division"`
 	Batch      int            `json:"batch"`
 	Lectures   []*Lecture     `gorm:"many2many:student_lectures;foreignKey:ID;joinForeignKey:StudentID;" json:"lectures"`
+	Subjects   pq.StringArray `gorm:"type:varchar(255)[]" json:"subjects,omitempty"`
 }
 
 type Faculty struct {

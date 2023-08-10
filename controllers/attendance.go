@@ -171,13 +171,13 @@ func GetAttendanceByYearandDivision(w http.ResponseWriter, r *http.Request) {
 		var SubAttendances []float64
 		StudentReport.SAPID = Students[i].SAPID
 		StudentReport.StudentName = Students[i].Name
+		StudentReport.Subjects = Students[i].Subjects
 		for j := 0; j < len(Subjects); j++ {
 			var SubAttendance SubjectAttendance
 			SubAttendance.SubjectName = Subjects[j].Name
 			SubAttendance.SubjectCode = Subjects[j].SubjectCode
 			var TotalLectures []database.StudentLecture
 			var AttendedLectures []database.StudentLecture
-			// err := dbconn.Model(&database.StudentLecture).Joins().Select("DISTINCT lecture_id").Where("subject_id = ? AND lecture.date_of_lecture BETWEEN ? AND ?", Subjects[j].ID, Report.StartDate, Report.EndDate).Find(&TotalLectures).Error
 			err := dbconn.Table("student_lectures").
 				Joins("JOIN lectures ON student_lectures.lecture_id = lectures.id").
 				Select("DISTINCT student_lectures.lecture_id").
@@ -186,13 +186,11 @@ func GetAttendanceByYearandDivision(w http.ResponseWriter, r *http.Request) {
 			if err != nil {
 				fmt.Println(err)
 			}
-
 			SubAttendance.TotalLectures = len(TotalLectures)
 			err = dbconn.Table("student_lectures").
 				Joins("JOIN lectures ON student_lectures.lecture_id = lectures.id").
 				Where("student_lectures.student_id = ? AND student_lectures.subject_id = ? AND lectures.date_of_lecture BETWEEN ? AND ?", Students[i].ID, Subjects[j].ID, Report.StartDate, Report.EndDate).
 				Find(&AttendedLectures).Error
-			// err = dbconn.Preload("Lecture").Where("student_id = ? AND subject_id = ?", Students[i].ID, Subjects[j].ID).Find(&AttendedLectures).Error
 			if err != nil {
 				fmt.Println(err)
 			}

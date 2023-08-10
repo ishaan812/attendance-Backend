@@ -32,9 +32,10 @@ type StudentAttendanceReq struct {
 type StudentAttendanceReport struct {
 	SAPID             int                 `json:"student_id"`
 	StudentName       string              `json:"student_name"`
-	SubjectAttendance []SubjectAttendance `json: "subject_attendance"`
-	GrandAttendance   float64             `json: "grand_attendance"`
-	Status            string              `json: "defaulter"`
+	Subjects          []string            `json:"subjects"`
+	SubjectAttendance []SubjectAttendance `json:"subject_attendance"`
+	GrandAttendance   float64             `json:"grand_attendance"`
+	Status            string              `json:"defaulter"`
 }
 
 type DivisionReport struct {
