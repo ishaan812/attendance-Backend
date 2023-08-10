@@ -71,3 +71,11 @@ type FetchLectureReq struct {
 	Batch         int    `json:"batch"`
 	FacultyID     string `json:"faculty_id"`
 }
+
+// Time Table Resposne
+type TimeTableResponse struct {
+	Day string `json:"day"`
+	StartTime string `json:"start_time"`
+	EndTime string `json:"end_time"`
+	SubjectName string `json:"subject_name"`
+}

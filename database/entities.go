@@ -80,3 +80,18 @@ type StudentLecture struct {
 	Lecture    Lecture        `gorm:"foreignkey:LectureID" json:"lecture,omitempty"`
 	Attendance bool           `json:"attendance"`
 }
+
+type TimeTableEntry struct {
+	CreatedAt  time.Time
+	UpdatedAt  time.Time
+	DeletedAt  gorm.DeletedAt `gorm:"index" json:"-"`
+	ID         uuid.UUID      `gorm:"primarykey;type:uuid;default:uuid_generate_v4()"`
+	Day        string         `json:"day,omitempty"`
+	StartTime  string         `json:"start_time,omitempty"`
+	EndTime    string         `json:"end_time,omitempty"`
+	SubjectID  uuid.UUID      `json:"subject_id,omitempty"`
+	Subject    *Subject       `gorm:"foreignkey:SubjectID" json:"subject,omitempty"`
+	FacultyID  uuid.UUID      `json:"faculty_id,omitempty"`
+	Faculty    *Faculty       `gorm:"foreignkey:FacultyID" json:"faculty,omitempty"`
+}
+
