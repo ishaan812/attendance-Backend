@@ -7,10 +7,9 @@ from csv import DictReader
 def get_db_conn():
     conn = psycopg2.connect(
         host="localhost",
-        port="5432",
-        database="attendance2",
+        database="attendance-management",
         user="postgres", # Replace postgres user name
-        password="hibye123") # Postgres password
+        password="8007ell") # Postgres password
     return conn
 
 def cleanup_all_tables(db_conn, table_list):
@@ -43,7 +42,7 @@ def add_data_to_database(record, table_name):
     db_conn.commit()
                 
 def read_csv():
-    table_name = 'students'
+    table_name = 'subjects'
     with open(table_name+'.csv', 'r', encoding='utf-8-sig') as file:
         dict_reader = DictReader(file)
         records = list(dict_reader)
@@ -53,16 +52,15 @@ def read_csv():
             record = {key.lstrip('\ufeff'): val.strip() for key, val in record.items()}  # Remove the BOM character from the first key in each record
             add_data_to_database(record, table_name)
 
-def read_csv():
-    table_name = 'students'
-    with open(table_name+'.csv', 'r', encoding='utf-8-sig') as file:
-        dict_reader = DictReader(file)
-        records = list(dict_reader)
-        column_names = [name.lstrip('\ufeff') for name in dict_reader.fieldnames]  # Remove the BOM character from the first column name
-        for record in records:
-            record = {key.lstrip('\ufeff'): val.strip() for key, val in record.items()}  # Remove the BOM character from the first key in each record
-            add_data_to_database(record, table_name)
-
+# def read_csv():
+#     table_name = 'students'
+#     with open(table_name+'.csv', 'r', encoding='utf-8-sig') as file:
+#         dict_reader = DictReader(file)
+#         records = list(dict_reader)
+#         column_names = [name.lstrip('\ufeff') for name in dict_reader.fieldnames]  # Remove the BOM character from the first column name
+#         for record in records:
+#             record = {key.lstrip('\ufeff'): val.strip() for key, val in record.items()}  # Remove the BOM character from the first key in each record
+#             add_data_to_database(record, table_name)
 
 if __name__ == "__main__":
     db_conn = get_db_conn()
