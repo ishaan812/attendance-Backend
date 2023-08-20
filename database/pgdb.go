@@ -19,6 +19,6 @@ func InitialMigration(DNS string) *gorm.DB {
 		panic("Failed to setup join table: StudentLecture")
 	}
 	DB.Exec("CREATE EXTENSION IF NOT EXISTS \"uuid-ossp\"")
-	DB.AutoMigrate(Student{}, TimeTableEntry{}, Faculty{}, Subject{}, Lecture{})
+	DB.AutoMigrate(Student{}, Faculty{}, Subject{}, Lecture{}, TimeTableEntry{})
 	return DB
 }

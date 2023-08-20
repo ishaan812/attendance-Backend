@@ -36,30 +36,13 @@ func GetAllTimeTableEntriesforFaculty(w http.ResponseWriter, r *http.Request) {
 	}
 	for _, entry := range timetableentries {
 		var subjectentry TimeTableResponse
-		subjectentry.SubjectCode = params["id"]
 		subjectentry.Day = entry.Day
 		subjectentry.StartTime = entry.StartTime
 		subjectentry.EndTime = entry.EndTime
 		subjectentry.SubjectName = entry.Subject.Name
 		timetableresponse = append(timetableresponse, subjectentry)
 	}
-	days := []string{"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"}
-	finalresponse := [][]TimeTableResponse{}
-	for _, day := range days {
-		var dayresponse []TimeTableResponse
-		for _, entry := range timetableresponse {
-			if entry.Day == day {
-				dayresponse = append(dayresponse, entry)
-			}
-		}
-		if len(dayresponse) == 0 {
-			finalresponse = append(finalresponse, make([]TimeTableResponse, 0))
-		} else {
-			finalresponse = append(finalresponse, dayresponse)
-		}
-	}
-
-	json.NewEncoder(w).Encode(&finalresponse)
+	json.NewEncoder(w).Encode(&timetableresponse)
 }
 
 func GetAllTimeTableEntries(w http.ResponseWriter, r *http.Request) {

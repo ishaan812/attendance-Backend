@@ -33,7 +33,7 @@ func MarkAttendance(w http.ResponseWriter, r *http.Request) {
 			json.NewEncoder(w).Encode("Invalid SAP ID")
 		}
 		StudentLecture.StudentID = Student.ID
-		StudentLecture.SubjectCode = Lecture.SubjectCode
+		StudentLecture.SubjectID = Lecture.SubjectID
 		StudentLecture.Attendance = true
 		err = dbconn.FirstOrCreate(&StudentLecture).Error
 		if err != nil {
@@ -92,12 +92,12 @@ func GetAttendanceBySAPID(w http.ResponseWriter, r *http.Request) {
 		SubAttendance.SubjectCode = Subjects[i].SubjectCode
 		var TotalLectures []database.StudentLecture
 		var AttendedLectures []database.StudentLecture
-		err := dbconn.Preload("Lecture").Where("subject_code = ?", Subjects[i].SubjectCode).Find(&TotalLectures).Error
+		err := dbconn.Preload("Lecture").Where("subject_id = ?", Subjects[i].ID).Find(&TotalLectures).Error
 		if err != nil {
 			fmt.Println(err)
 		}
 		SubAttendance.TotalLectures = len(TotalLectures)
-		err = dbconn.Preload("Lecture").Where("student_id = ? AND subject_code = ?", Student.ID, Subjects[i].SubjectCode).Find(&AttendedLectures).Error
+		err = dbconn.Preload("Lecture").Where("student_id = ? AND subject_id = ?", Student.ID, Subjects[i].SubjectCode).Find(&AttendedLectures).Error
 		if err != nil {
 			fmt.Println(err)
 		}
@@ -186,7 +186,7 @@ func GetAttendanceByYearandDivision(w http.ResponseWriter, r *http.Request) {
 			err := dbconn.Table("student_lectures").
 				Joins("JOIN lectures ON student_lectures.lecture_id = lectures.id").
 				Select("DISTINCT student_lectures.lecture_id").
-				Where("student_lectures.subject_code = ? AND lectures.date_of_lecture BETWEEN ? AND ?", Subjects[j].SubjectCode, Report.StartDate, Report.EndDate).
+				Where("student_lectures.subject_id = ? AND lectures.date_of_lecture BETWEEN ? AND ?", Subjects[j].SubjectCode, Report.StartDate, Report.EndDate).
 				Find(&TotalLectures).Error
 			if err != nil {
 				fmt.Println(err)
@@ -194,7 +194,7 @@ func GetAttendanceByYearandDivision(w http.ResponseWriter, r *http.Request) {
 			SubAttendance.TotalLectures = len(TotalLectures)
 			err = dbconn.Table("student_lectures").
 				Joins("JOIN lectures ON student_lectures.lecture_id = lectures.id").
-				Where("student_lectures.student_id = ? AND student_lectures.subject_code = ? AND lectures.date_of_lecture BETWEEN ? AND ?", Students[i].ID, Subjects[j].SubjectCode, Report.StartDate, Report.EndDate).
+				Where("student_lectures.student_id = ? AND student_lectures.subject_id = ? AND lectures.date_of_lecture BETWEEN ? AND ?", Students[i].ID, Subjects[j].SubjectCode, Report.StartDate, Report.EndDate).
 				Find(&AttendedLectures).Error
 			if err != nil {
 				fmt.Println(err)

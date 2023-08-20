@@ -40,7 +40,8 @@ type Subject struct {
 	CreatedAt   time.Time
 	UpdatedAt   time.Time
 	DeletedAt   gorm.DeletedAt `gorm:"index" json:"-"`
-	SubjectCode string         `gorm:"primarykey; unique" json:"subject_code,omitempty"`
+	ID          uuid.UUID      `gorm:"primarykey;type:uuid;default:uuid_generate_v4()"`
+	SubjectCode string         `json:"subject_code,omitempty"`
 	Name        string         `json:"name,omitempty"`
 	Year        int            `json:"year,omitempty"`
 	Department  string         `json:"department,omitempty"`
@@ -56,8 +57,8 @@ type Lecture struct {
 	DateOfLecture string         `json:"date_of_lecture,omitempty" gorm:"type:date"`
 	StartTime     string         `json:"start_time,omitempty"`
 	EndTime       string         `json:"end_time,omitempty"`
-	SubjectCode   string         `json:"subject_code,omitempty"`
-	Subject       *Subject       `gorm:"foreignKey:SubjectCode" json:"subject,omitempty"`
+	SubjectID     uuid.UUID      `json:"subject_id,omitempty"`
+	Subject       *Subject       `gorm:"foreignkey:SubjectID" json:"subject,omitempty"`
 	Type          string         `json:"type,omitempty"`
 	Year          string         `json:"year_of_graduation,omitempty"`
 	Division      string         `json:"division,omitempty"`
@@ -67,30 +68,30 @@ type Lecture struct {
 }
 
 type StudentLecture struct {
-	CreatedAt   time.Time
-	UpdatedAt   time.Time
-	DeletedAt   gorm.DeletedAt `gorm:"index"`
-	ID          uuid.UUID      `gorm:"index;type:uuid;default:uuid_generate_v4()" json:"id,omitempty"`
-	StudentID   uuid.UUID      `gorm:"primarykey" json:"student_id,omitempty"`
-	Student     Student        `gorm:"foreignkey:StudentID" json:"student,omitempty"`
-	SubjectCode string         `json:"subject_code,omitempty"`
-	Subject     *Subject       `gorm:"foreignKey:SubjectCode" json:"subject,omitempty"`
-	LectureID   uuid.UUID      `gorm:"primarykey" json:"lecture_id"`
-	Lecture     Lecture        `gorm:"foreignkey:LectureID" json:"lecture,omitempty"`
-	Attendance  bool           `json:"attendance"`
+	CreatedAt  time.Time
+	UpdatedAt  time.Time
+	DeletedAt  gorm.DeletedAt `gorm:"index"`
+	ID         uuid.UUID      `gorm:"index;type:uuid;default:uuid_generate_v4()" json:"id,omitempty"`
+	StudentID  uuid.UUID      `gorm:"primarykey" json:"student_id,omitempty"`
+	Student    Student        `gorm:"foreignkey:StudentID" json:"student,omitempty"`
+	SubjectID  uuid.UUID      `json:"subject_id"`
+	Subject    Subject        `gorm:"foreignkey:SubjectID" json:"subject,omitempty"`
+	LectureID  uuid.UUID      `gorm:"primarykey" json:"lecture_id"`
+	Lecture    Lecture        `gorm:"foreignkey:LectureID" json:"lecture,omitempty"`
+	Attendance bool           `json:"attendance"`
 }
 
 type TimeTableEntry struct {
-	CreatedAt   time.Time
-	UpdatedAt   time.Time
-	DeletedAt   gorm.DeletedAt `gorm:"index" json:"-"`
-	ID          uuid.UUID      `gorm:"index;type:uuid;default:uuid_generate_v4()" json:"id,omitempty"`
-	Day         string         `json:"day,omitempty"`
-	Type        string         `json:"type,omitempty"`
-	StartTime   string         `json:"start_time,omitempty"`
-	EndTime     string         `json:"end_time,omitempty"`
-	SubjectCode string         `json:"subject_code,omitempty"`
-	Subject     *Subject       `gorm:"foreignKey:SubjectCode" json:"subject,omitempty"`
-	FacultyID   uuid.UUID      `json:"faculty_id,omitempty"`
-	Faculty     *Faculty       `gorm:"foreignkey:FacultyID" json:"faculty,omitempty"`
+	CreatedAt  time.Time
+	UpdatedAt  time.Time
+	DeletedAt  gorm.DeletedAt `gorm:"index" json:"-"`
+	ID         uuid.UUID      `gorm:"primarykey;type:uuid;default:uuid_generate_v4()"`
+	Day        string         `json:"day,omitempty"`
+	StartTime  string         `json:"start_time,omitempty"`
+	EndTime    string         `json:"end_time,omitempty"`
+	SubjectID  uuid.UUID      `json:"subject_id,omitempty"`
+	Subject    *Subject       `gorm:"foreignkey:SubjectID" json:"subject,omitempty"`
+	FacultyID  uuid.UUID      `json:"faculty_id,omitempty"`
+	Faculty    *Faculty       `gorm:"foreignkey:FacultyID" json:"faculty,omitempty"`
 }
+
