@@ -8,9 +8,9 @@ from csv import DictReader
 def get_db_conn():
     conn = psycopg2.connect(
         host="localhost",
-        database="attendance",
-        user="postgres",  # Replace postgres user name
-        password="bhavyagor123")  # Postgres password
+        database="attendance-management",
+        user="postgres", # Replace postgres user name
+        password="8007ell") # Postgres password
     return conn
 
 
@@ -45,7 +45,7 @@ def add_data_to_database(record, table_name):
 
 
 def read_csv():
-    table_name = 'students'
+    table_name = 'time_table_entries'
     with open(table_name+'.csv', 'r', encoding='utf-8-sig') as file:
         dict_reader = DictReader(file)
         records = list(dict_reader)
@@ -58,8 +58,7 @@ def read_csv():
                       for key, val in record.items()}
             add_data_to_database(record, table_name)
 
-
 if __name__ == "__main__":
     db_conn = get_db_conn()
-    # cleanup_all_tables(db_conn, ["students"])
+    # cleanup_all_tables(db_conn, ["subjects"])
     read_csv()

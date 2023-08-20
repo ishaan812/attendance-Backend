@@ -1,0 +1,5 @@
+day,start_time,end_time,type,subject_code,faculty_id
+Monday,09:00 AM,10:30 AM,theory,DWM69,0f5f45f1-2a72-4c85-a71a-fec0fc1312fd
+Tuesday,11:00 AM,12:30 PM,theory,IACV69,0f5f45f1-2a72-4c85-a71a-fec0fc1312fd
+Wednesday,02:00 PM,03:30 PM,theory,UIUX69,0f5f45f1-2a72-4c85-a71a-fec0fc1312fd
+Thursday,08:30 AM,10:00 AM,theory,CNS69,0f5f45f1-2a72-4c85-a71a-fec0fc1312fd
