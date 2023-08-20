@@ -36,7 +36,7 @@ func CreateLecturewithSubjectCode(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		json.NewEncoder(w).Encode(err.Error)
 	}
-	lecture.SubjectCode = subject.ID
+	lecture.SubjectID = subject.ID
 	err = dbconn.Create(&lecture).Error
 	if err != nil {
 		json.NewEncoder(w).Encode(err.Error)
