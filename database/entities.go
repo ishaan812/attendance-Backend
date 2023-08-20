@@ -59,7 +59,7 @@ type Lecture struct {
 	SubjectID     string         `json:"subject_code"`
 	Subject       *Subject       `gorm:"foreignkey:SubjectID" json:"subject,omitempty"`
 	Type          string         `json:"type,omitempty"`
-	Year          string         `json:"year_of_graduation,omitempty"`
+	Year          string         `json:"year,omitempty"`
 	Division      string         `json:"division,omitempty"`
 	Batch         int            `json:"batch,omitempty"`
 	FacultyID     uuid.UUID      `json:"faculty_id,omitempty"`
