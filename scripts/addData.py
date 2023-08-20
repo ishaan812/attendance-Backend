@@ -2,21 +2,23 @@ import yaml
 import psycopg2
 import json
 import base64
-from csv import DictReader  
+from csv import DictReader
+
 
 def get_db_conn():
     conn = psycopg2.connect(
         host="localhost",
-        database="attendance2",
-        user="postgres", # Replace postgres user name
-        password="hibye123") # Postgres password
+        database="attendance",
+        user="postgres",  # Replace postgres user name
+        password="bhavyagor123")  # Postgres password
     return conn
+
 
 def cleanup_all_tables(db_conn, table_list):
     print("Cleaning up: ", ','.join(table_list))
     cursor = db_conn.cursor()
     for table in table_list:
-        query = "TRUNCATE TABLE {table} CASCADE".format(table = table)
+        query = "TRUNCATE TABLE {table} CASCADE".format(table=table)
         print(query)
         cursor.execute(query)
         db_conn.commit()
@@ -31,7 +33,7 @@ def add_data_to_database(record, table_name):
     column_names.extend(record.keys())
     column_values.extend(record.values())
     print("Column Names: ", column_names)
-    print("Column Values: ", column_values)             
+    print("Column Values: ", column_values)
     query = "INSERT INTO {table_name}({column_names_str}) VALUES ({column_values_str});".format(
         table_name=table_name,
         column_names_str=','.join(column_names),
@@ -40,16 +42,22 @@ def add_data_to_database(record, table_name):
     print(query)
     cursor.execute(query)
     db_conn.commit()
-                
+
+
 def read_csv():
     table_name = 'students'
     with open(table_name+'.csv', 'r', encoding='utf-8-sig') as file:
         dict_reader = DictReader(file)
         records = list(dict_reader)
-        column_names = [name.lstrip('\ufeff') for name in dict_reader.fieldnames]  # Remove the BOM character from the first column name
+        # Remove the BOM character from the first column name
+        column_names = [name.lstrip('\ufeff')
+                        for name in dict_reader.fieldnames]
         for record in records:
-            record = {key.lstrip('\ufeff'): val.strip() for key, val in record.items()}  # Remove the BOM character from the first key in each record
+            # Remove the BOM character from the first key in each record
+            record = {key.lstrip('\ufeff'): val.strip()
+                      for key, val in record.items()}
             add_data_to_database(record, table_name)
+
 
 if __name__ == "__main__":
     db_conn = get_db_conn()
