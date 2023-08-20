@@ -49,7 +49,7 @@ func InitializeRouter() {
 	r.HandleFunc("/lecture/{id}", controllers.GetLectureByID).Methods("GET")
 	r.HandleFunc("/lecture/{id}", controllers.UpdateLecture).Methods("PUT")
 	r.HandleFunc("/lecture/{id}", controllers.DeleteLecture).Methods("DELETE")
-	r.HandleFunc("/getLecturesBySubject/{id}", controllers.GetLecturesBySubject).Methods("GET")
+	r.HandleFunc("/getLecturesBySubject/{subject_code}", controllers.GetLecturesBySubject).Methods("GET")
 	r.HandleFunc("/getLecturesByFaculty/{id}", controllers.GetLecturesByFaculty).Methods("GET")
 	r.HandleFunc("/fetchLecture", controllers.FetchLecture).Methods("POST", "OPTIONS")
 
