@@ -23,6 +23,27 @@ func CreateLecture(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(&lecture)
 }
 
+func CreateLecturewithSubjectCode(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "*")
+	w.Header().Set("Content-Type", "application/json")
+	params := mux.Vars(r)
+	var lecture database.Lecture
+	json.NewDecoder(r.Body).Decode(&lecture)
+	fmt.Println(params["subject_code"])
+	var subject database.Subject
+	err := dbconn.Where("subject_code = ?", params["subject_code"]).First(&subject).Error
+	if err != nil {
+		json.NewEncoder(w).Encode(err.Error)
+	}
+	lecture.SubjectID = subject.ID
+	err = dbconn.Create(&lecture).Error
+	if err != nil {
+		json.NewEncoder(w).Encode(err.Error)
+	}
+	json.NewEncoder(w).Encode(&lecture)
+}
+
 func GetAllLectures(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")

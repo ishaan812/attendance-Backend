@@ -74,8 +74,9 @@ type FetchLectureReq struct {
 
 // Time Table Resposne
 type TimeTableResponse struct {
-	Day string `json:"day"`
-	StartTime string `json:"start_time"`
-	EndTime string `json:"end_time"`
+	SubjectCode string `json:"subject_code"`
+	Day         string `json:"day"`
+	StartTime   string `json:"start_time"`
+	EndTime     string `json:"end_time"`
 	SubjectName string `json:"subject_name"`
 }
