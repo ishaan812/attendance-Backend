@@ -42,6 +42,8 @@ func GetAllTimeTableEntriesforFaculty(w http.ResponseWriter, r *http.Request) {
 		subjectentry.StartTime = entry.StartTime
 		subjectentry.EndTime = entry.EndTime
 		subjectentry.SubjectName = entry.Subject.Name
+		subjectentry.Division = entry.Division
+		subjectentry.Batch = entry.Batch
 		timetableresponse = append(timetableresponse, subjectentry)
 	}
 	json.NewEncoder(w).Encode(&timetableresponse)

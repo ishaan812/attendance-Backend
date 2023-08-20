@@ -80,4 +80,6 @@ type TimeTableResponse struct {
 	StartTime   string `json:"start_time"`
 	EndTime     string `json:"end_time"`
 	SubjectName string `json:"subject_name"`
+	Division    string `json:"division,omitempty"`
+	Batch       int    `json:"batch,omitempty"`
 }

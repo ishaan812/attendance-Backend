@@ -106,7 +106,7 @@ func GetLecturesBySubject(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	params := mux.Vars(r)
 	var subject database.Subject
-	err := dbconn.Where("subject_code = ?", params["subject_code"]).First(&subject).Error
+	err := dbconn.Where("id = ?", params["subject_code"]).First(&subject).Error
 	if err != nil {
 		json.NewEncoder(w).Encode(err)
 	}

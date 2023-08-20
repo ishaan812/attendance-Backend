@@ -89,7 +89,9 @@ type TimeTableEntry struct {
 	Type      string         `json:"type,omitempty"`
 	StartTime string         `json:"start_time,omitempty"`
 	EndTime   string         `json:"end_time,omitempty"`
-	SubjectID string         `json:"subject_id,omitempty"`
+	SubjectID string         `json:"subject_code,omitempty"`
+	Division  string         `json:"division,omitempty"`
+	Batch     int            `json:"batch,omitempty"`
 	Subject   *Subject       `gorm:"foreignkey:SubjectID" json:"subject,omitempty"`
 	FacultyID uuid.UUID      `json:"faculty_id,omitempty"`
 	Faculty   *Faculty       `gorm:"foreignkey:FacultyID" json:"faculty,omitempty"`
