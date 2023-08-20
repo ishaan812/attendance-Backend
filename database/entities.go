@@ -42,7 +42,7 @@ type Subject struct {
 	DeletedAt  gorm.DeletedAt `gorm:"index" json:"-"`
 	ID         string         `gorm:"primarykey" json:"subject_code"`
 	Name       string         `json:"name,omitempty"`
-	Year       int            `json:"year,omitempty"`
+	Year       string         `json:"year,omitempty"`
 	Department string         `json:"department,omitempty"`
 	FacultyID  uuid.UUID      `json:"faculty_id,omitempty"`
 	Faculty    *Faculty       `gorm:"foreignkey:FacultyID" json:"faculty,omitempty"`

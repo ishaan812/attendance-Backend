@@ -83,4 +83,5 @@ type TimeTableResponse struct {
 	SubjectName string `json:"subject_name"`
 	Division    string `json:"division,omitempty"`
 	Batch       int    `json:"batch,omitempty"`
+	Year        string `json:"year,omitempty"`
 }
