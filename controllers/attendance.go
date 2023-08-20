@@ -92,7 +92,7 @@ func GetAttendanceBySAPID(w http.ResponseWriter, r *http.Request) {
 		SubAttendance.SubjectCode = Subjects[i].SubjectCode
 		var TotalLectures []database.StudentLecture
 		var AttendedLectures []database.StudentLecture
-		err := dbconn.Preload("Lecture").Where("subject_id = ?", Subjects[i].ID).Find(&TotalLectures).Error
+		err := dbconn.Preload("Lecture").Where("subject_id = ?", Subjects[i].SubjectCode).Find(&TotalLectures).Error
 		if err != nil {
 			fmt.Println(err)
 		}

@@ -85,12 +85,12 @@ func GetLecturesBySubject(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	params := mux.Vars(r)
 	fmt.Println(params["id"])
-	subject_code, err := uuid.Parse(params["id"])
+	subject_id, err := uuid.Parse(params["id"])
 	if err != nil {
 		json.NewEncoder(w).Encode(err)
 	}
 	var lectures []database.Lecture
-	err = dbconn.Preload("Subject").Preload("Faculty").Where("subject_code = ?", subject_code).Find(&lectures).Error
+	err = dbconn.Preload("Subject").Preload("Faculty").Where("subject_id = ?", subject_id).Find(&lectures).Error
 	if err != nil {
 		json.NewEncoder(w).Encode(err)
 	}
