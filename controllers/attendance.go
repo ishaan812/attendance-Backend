@@ -19,6 +19,7 @@ func MarkAttendance(w http.ResponseWriter, r *http.Request) {
 	var Lecture database.Lecture
 	var err error
 	json.NewDecoder(r.Body).Decode(&AttendanceQuery)
+
 	LectureID, err := uuid.Parse(AttendanceQuery.LectureID)
 	if err != nil {
 		json.NewEncoder(w).Encode("Invalid Lecture ID")
@@ -28,12 +29,13 @@ func MarkAttendance(w http.ResponseWriter, r *http.Request) {
 		var StudentLecture database.StudentLecture
 		var Student database.Student
 		StudentLecture.LectureID = LectureID
+		StudentLecture.SubjectID = AttendanceQuery.SubjectID
 		err := dbconn.Where("s_api_d = ?", AttendanceQuery.Attendance[i]).First(&Student).Error
 		if err != nil {
 			json.NewEncoder(w).Encode("Invalid SAP ID")
 		}
 		StudentLecture.StudentID = Student.ID
-		StudentLecture.ID = Lecture.ID
+		// StudentLecture.ID = Lecture.ID
 		StudentLecture.Attendance = true
 		err = dbconn.FirstOrCreate(&StudentLecture).Error
 		if err != nil {

@@ -74,9 +74,9 @@ type StudentLecture struct {
 	StudentID  uuid.UUID      `gorm:"primarykey" json:"student_id,omitempty"`
 	Student    Student        `gorm:"foreignkey:StudentID" json:"student,omitempty"`
 	SubjectID  string         `json:"subject_code"`
-	Subject    Subject        `gorm:"foreignkey:SubjectID" json:"subject,omitempty"`
+	Subject    *Subject       `gorm:"foreignkey:SubjectID" json:"subject,omitempty"`
 	LectureID  uuid.UUID      `gorm:"primarykey" json:"lecture_id"`
-	Lecture    Lecture        `gorm:"foreignkey:LectureID" json:"lecture,omitempty"`
+	Lecture    *Lecture       `gorm:"foreignkey:LectureID" json:"lecture,omitempty"`
 	Attendance bool           `json:"attendance"`
 }
 

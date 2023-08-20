@@ -20,6 +20,7 @@ type Claims struct {
 type AttendanceQuery struct {
 	LectureID  string `json:"lecture_id"`
 	Attendance []int  `json:"attendance"`
+	SubjectID  string `json:"subject_code"`
 }
 
 // Student
