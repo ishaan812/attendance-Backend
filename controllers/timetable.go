@@ -38,6 +38,7 @@ func GetAllTimeTableEntriesforFaculty(w http.ResponseWriter, r *http.Request) {
 		var subjectentry TimeTableResponse
 		subjectentry.SubjectCode = entry.Subject.SubjectCode
 		subjectentry.Day = entry.Day
+		subjectentry.Type = entry.Type
 		subjectentry.StartTime = entry.StartTime
 		subjectentry.EndTime = entry.EndTime
 		subjectentry.SubjectName = entry.Subject.Name
