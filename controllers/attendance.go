@@ -217,19 +217,20 @@ func GetAttendanceByYearandDivision(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 		var res float64
-		//Create SubjectMap
 		var SubjectMap []int
-		for j := 0; j < len(Students[i].Subjects); j++ {
-			if y:=0; y < len(SubjectCodes) {
-				if Students[i].Subjects[j] == SubjectCodes[y] {
+		// Array of Subattendences
+		// fmt.Println(Students[i].Subjects)
+		for z := 0; z < len(Students[i].Subjects); z++ {
+			for y := 0; y < len(SubjectCodes); y++ {
+				if Students[i].Subjects[z] == SubjectCodes[y] {
 					SubjectMap = append(SubjectMap, y)
 				}
 			}
 		}
+		fmt.Println(SubjectMap)
 		for k := 0; k < len(SubjectMap); k++ {
 			res += SubAttendances[SubjectMap[k]]
 		}
-		// Active Subjects
 		ActiveSubjects := 0
 		for m := 0; m < len(SubjectMap); m++ {
 			if StudentReport.SubjectAttendance[SubjectMap[m]].TotalLectures != 0 {
