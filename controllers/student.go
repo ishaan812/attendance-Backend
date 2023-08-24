@@ -82,7 +82,7 @@ func GetAllStudentsBySubject(w http.ResponseWriter, r *http.Request) {
 			if querystring != "" {
 				querystring = querystring + " AND "
 			}
-			querystring += "year = " + year
+			querystring += "year = '" + year + "'"
 		}
 		if division != "" {
 			if querystring != "" {
@@ -94,7 +94,7 @@ func GetAllStudentsBySubject(w http.ResponseWriter, r *http.Request) {
 			if querystring != "" {
 				querystring = querystring + " AND "
 			}
-			querystring = querystring + "batch = " + batch
+			querystring = querystring + "batch = '" + batch + "'"
 		}
 		fmt.Println(querystring)
 		err := dbconn.Preload("Lectures").Find(&students, querystring).Error
