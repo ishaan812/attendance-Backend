@@ -242,8 +242,8 @@ func GetAttendanceByYearandDivision(w http.ResponseWriter, r *http.Request) {
 				StudentReport.Status = "Eligible"
 			}
 		} else {
-			StudentReport.GrandAttendance = 0
-			StudentReport.Status = "No Lectures in this period"
+			StudentReport.GrandAttendance = -1
+			StudentReport.Status = "-"
 		}
 		Report.AttendanceList = append(Report.AttendanceList, StudentReport)
 	}
