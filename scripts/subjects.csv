@@ -1,5 +1,5 @@
-﻿﻿id,name,year,department,faculty_id
-DWM69,DWM,3,IT,c6786b2f-66cb-42d6-96c5-eae68e4ee275
-IACV69,IACV,3,IT,c6786b2f-66cb-42d6-96c5-eae68e4ee275
-UIUX69,UI/UX,3,IT,c6786b2f-66cb-42d6-96c5-eae68e4ee275
-CNS69,CNS,3,IT,c6786b2f-66cb-42d6-96c5-eae68e4ee275
+﻿﻿id,name,year,department
+DWM69,DWM,3,IT
+IACV69,IACV,3,IT
+UIUX69,UI/UX,3,IT
+CNS69,CNS,3,IT

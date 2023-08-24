@@ -79,3 +79,18 @@ func UpdateFaculty(w http.ResponseWriter, r *http.Request) {
 	dbconn.Save(&faculty)
 	json.NewEncoder(w).Encode(&faculty)
 }
+
+func GetSubjectsByFaculty(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Content-Type", "application/json")
+	params := mux.Vars(r)
+	var faculty database.Faculty
+	err := dbconn.Where("id = ?", params["id"]).First(&faculty).Error
+	if err != nil {
+		json.NewEncoder(w).Encode("Invalid ID")
+	} else {
+		for i := 0; i < len(faculty.Subjects); i++ {
+			dbconn.Where("id = ?", faculty.Subjects[i]).First(&faculty.Subjects[i])
+		}
+	}
+}

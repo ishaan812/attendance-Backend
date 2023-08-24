@@ -95,18 +95,17 @@ func GetSubjectBySubjectCode(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(&subject)
 }
 
-func GetSubjectByFacultyID(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
-	w.Header().Set("Content-Type", "application/json")
-	params := mux.Vars(r)
-	var subject []database.Subject
-	err := dbconn.Where("faculty_id = ?", params["id"]).Find(&subject).Error
-	if err != nil {
-		json.NewEncoder(w).Encode("Invalid ID")
-	}
-	json.NewDecoder(r.Body).Decode(&subject)
-	dbconn.Save(&subject)
-	json.NewEncoder(w).Encode(&subject)
-}
-
+// func GetSubjectByFacultyID(w http.ResponseWriter, r *http.Request) {
+// 	w.Header().Set("Access-Control-Allow-Origin", "*")
+// 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+// 	w.Header().Set("Content-Type", "application/json")
+// 	params := mux.Vars(r)
+// 	var subject []database.Subject
+// 	err := dbconn.Where("? = any(faculty_id)", params["id"]).Find(&subject).Error
+// 	if err != nil {
+// 		json.NewEncoder(w).Encode("Invalid ID")
+// 	}
+// 	json.NewDecoder(r.Body).Decode(&subject)
+// 	dbconn.Save(&subject)
+// 	json.NewEncoder(w).Encode(&subject)
+// }

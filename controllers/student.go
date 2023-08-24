@@ -70,7 +70,7 @@ func GetAllStudentsBySubject(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	var students []database.Student
 	params := mux.Vars(r)
-	err := dbconn.Preload("Lectures").Where("? =  any(subjects)", params["subject_name"]).Find(&students).Error
+	err := dbconn.Preload("Lectures").Where("? =  any(subjects)", params["subject_code"]).Find(&students).Error
 	if err != nil {
 		json.NewEncoder(w).Encode("Invalid ID")
 	} else {
