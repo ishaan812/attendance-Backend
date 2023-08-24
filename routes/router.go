@@ -57,7 +57,7 @@ func InitializeRouter() {
 	r.HandleFunc("/register", controllers.Register).Methods("POST", "OPTIONS")
 	r.HandleFunc("/login", controllers.Login).Methods("POST", "OPTIONS")
 	r.HandleFunc("/logout", controllers.Logout).Methods("GET")
-	r.HandleFunc("/refresh", controllers.Refresh).Methods("GET")
+	// r.HandleFunc("/refresh", controllers.Refresh).Methods("GET")
 
 	r.HandleFunc("/markAttendance", controllers.MarkAttendance).Methods("PUT")
 	r.HandleFunc("/getLectureAttendance/{id}", controllers.GetLectureAttendance).Methods("POST", "OPTIONS")

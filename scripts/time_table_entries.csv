@@ -1,5 +1,5 @@
 day,start_time,end_time,type,subject_id,division,batch,faculty_id
-Monday,09:00 AM,10:30 AM,theory,DWM69,B,1,c6786b2f-66cb-42d6-96c5-eae68e4ee275
-Tuesday,11:00 AM,12:30 PM,theory,IACV69,B,1,c6786b2f-66cb-42d6-96c5-eae68e4ee275
-Wednesday,02:00 PM,03:30 PM,theory,UIUX69,B,1,c6786b2f-66cb-42d6-96c5-eae68e4ee275
-Thursday,08:30 AM,10:00 AM,theory,CNS69,B,1,c6786b2f-66cb-42d6-96c5-eae68e4ee275
+Monday,09:00 AM,10:30 AM,theory,DWM69,B,1,b664ad75-3773-406e-8221-d0a933a52c4f
+Tuesday,11:00 AM,12:30 PM,theory,PDC69,B,1,b664ad75-3773-406e-8221-d0a933a52c4f
+Wednesday,02:00 PM,03:30 PM,theory,PDC69,B,1,b664ad75-3773-406e-8221-d0a933a52c4f
+Thursday,08:30 AM,10:00 AM,theory,PDC69,B,1,b664ad75-3773-406e-8221-d0a933a52c4f
