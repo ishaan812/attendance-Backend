@@ -89,8 +89,15 @@ func GetSubjectsByFaculty(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		json.NewEncoder(w).Encode("Invalid ID")
 	} else {
+		var subjects []database.Subject
 		for i := 0; i < len(faculty.Subjects); i++ {
-			dbconn.Where("id = ?", faculty.Subjects[i]).First(&faculty.Subjects[i])
+			var subject database.Subject
+			err := dbconn.Where("id = ?", faculty.Subjects[i]).First(&subject).Error
+			if err != nil {
+				json.NewEncoder(w).Encode("Invalid Subject ID")
+			}
+			subjects = append(subjects, subject)
 		}
+		json.NewEncoder(w).Encode(&subjects)
 	}
 }

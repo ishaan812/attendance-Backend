@@ -61,7 +61,7 @@ func InitializeRouter() {
 
 	r.HandleFunc("/markAttendance", controllers.MarkAttendance).Methods("PUT")
 	r.HandleFunc("/getLectureAttendance/{id}", controllers.GetLectureAttendance).Methods("POST", "OPTIONS")
-	r.HandleFunc("/getSubjectbyFacultyID/{id}", controllers.GetSubjectsByFaculty).Methods("GET")
+	r.HandleFunc("/getSubjectsbyFaculty/{id}", controllers.GetSubjectsByFaculty).Methods("GET")
 	r.HandleFunc("/getStudentAttendance", controllers.GetAttendanceBySAPID).Methods("POST", "OPTIONS")
 	r.HandleFunc("/getClassAttendance", controllers.GetAttendanceByYearandDivision).Methods("POST", "OPTIONS")
 
