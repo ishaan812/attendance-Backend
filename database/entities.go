@@ -34,6 +34,7 @@ type Faculty struct {
 	Name       string         `json:"name"`
 	Email      string         `json:"email"`
 	Department string         `json:"department"`
+	Subjects   pq.StringArray `gorm:"type:varchar(255)[]" json:"subjects,omitempty"`
 }
 
 type Subject struct {
@@ -44,8 +45,6 @@ type Subject struct {
 	Name       string         `json:"name,omitempty"`
 	Year       string         `json:"year,omitempty"`
 	Department string         `json:"department,omitempty"`
-	FacultyID  uuid.UUID      `json:"faculty_id,omitempty"`
-	Faculty    *Faculty       `gorm:"foreignkey:FacultyID" json:"faculty,omitempty"`
 }
 
 type Lecture struct {
@@ -63,7 +62,7 @@ type Lecture struct {
 	Division      string         `json:"division,omitempty"`
 	Batch         int            `json:"batch,omitempty"`
 	FacultyID     uuid.UUID      `json:"faculty_id,omitempty"`
-	Faculty       *Faculty       `gorm:"foreignkey:FacultyID" json:"faculty,omitempty"`
+	Faculty       Faculty        `gorm:"foreignkey:FacultyID" json:"faculty,omitempty"`
 }
 
 type StudentLecture struct {

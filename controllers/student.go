@@ -64,6 +64,20 @@ func GetAllStudents(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func GetAllStudentsBySubject(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	w.Header().Set("Content-Type", "application/json")
+	var students []database.Student
+	params := mux.Vars(r)
+	err := dbconn.Preload("Lectures").Where("? =  any(subjects)", params["subject_code"]).Find(&students).Error
+	if err != nil {
+		json.NewEncoder(w).Encode("Invalid ID")
+	} else {
+		json.NewEncoder(w).Encode(&students)
+	}
+}
+
 func GetStudentByID(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
