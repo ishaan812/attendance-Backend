@@ -2,18 +2,13 @@ package controllers
 
 import (
 	"time"
-
-	"github.com/golang-jwt/jwt/v4"
 )
 
 type Claims struct {
-	SAPID      string    `json:"sap_id"`
-	UserID     int       `json:"user_id"`
-	Email      string    `json:"email"`
-	Name       string    `json:"name"`
-	Department string    `json:"department"`
-	Expires    time.Time `json:"expires"`
-	jwt.RegisteredClaims
+	SAPID  string `json:"sap_id"`
+	UserID int    `json:"user_id"`
+	Email  string `json:"email"`
+	Name   string `json:"name"`
 }
 
 // Attendance
@@ -40,7 +35,7 @@ type StudentAttendanceReport struct {
 }
 
 type DivisionReport struct {
-	Year           int                       `json:"year"`
+	Year           string                    `json:"year"`
 	Subjects       []string                  `json:"subjects"`
 	Division       string                    `json:"division"`
 	StartDate      time.Time                 `json:"start_date"`
@@ -49,7 +44,7 @@ type DivisionReport struct {
 }
 
 type ClassAttendanceReq struct {
-	Year      int    `json:"year"`
+	Year      string `json:"year"`
 	Division  string `json:"division"`
 	Type      string `json:"type"`
 	StartDate string `json:"start_date"`

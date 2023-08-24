@@ -49,6 +49,7 @@ func GetAllLectures(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 	w.Header().Set("Content-Type", "application/json")
 	var lectures []database.Lecture
+
 	err := dbconn.Preload("Subject").Find(&lectures).Error
 	if err != nil {
 		json.NewEncoder(w).Encode(err)
