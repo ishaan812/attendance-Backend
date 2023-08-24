@@ -8,9 +8,10 @@ from csv import DictReader
 def get_db_conn():
     conn = psycopg2.connect(
         host="localhost",
+        port="5432",
         database="attendance1",
         user="postgres", # Replace postgres user name
-        password="hibye123") # Postgres password
+        password="Allhailbruno18") # Postgres password
     return conn
 
 
