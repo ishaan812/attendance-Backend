@@ -16,18 +16,10 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	var Faculty database.Faculty
 	json.NewDecoder(r.Body).Decode(&Faculty)
 	faculty, err := LoginUser(&Faculty)
-	fmt.Println(Faculty)
 	if err != nil {
 		json.NewEncoder(w).Encode("AuthError")
 	} else {
-		JWTCookie, err := CreateJWT(&Faculty)
-		if err != nil {
-			fmt.Println("Error while creating JWT.")
-			json.NewEncoder(w).Encode("JWTError")
-		} else {
-			http.SetCookie(w, JWTCookie)
-			json.NewEncoder(w).Encode(faculty)
-		}
+		json.NewEncoder(w).Encode(faculty)
 	}
 }
 
