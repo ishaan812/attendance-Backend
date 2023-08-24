@@ -154,14 +154,14 @@ func GetAttendanceByYearandDivision(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		json.NewEncoder(w).Encode("Wrong year")
 	}
-	SubjectNames := []string{}
+	SubjectCodes := []string{}
 	for i := 0; i < len(Subjects); i++ {
-		SubjectNames = append(SubjectNames, Subjects[i].Name)
+		SubjectCodes = append(SubjectCodes, Subjects[i].ID)
 	}
 	var Report DivisionReport
 	Report.Year = ClassAttendanceRequest.Year
 	Report.Division = ClassAttendanceRequest.Division
-	Report.Subjects = SubjectNames
+	Report.Subjects = SubjectCodes
 	Report.StartDate, err = time.Parse("2006-01-02", ClassAttendanceRequest.StartDate)
 	if err != nil {
 		http.Error(w, "Invalid start date format", http.StatusBadRequest)
@@ -216,10 +216,16 @@ func GetAttendanceByYearandDivision(w http.ResponseWriter, r *http.Request) {
 				StudentReport.SubjectAttendance = append(StudentReport.SubjectAttendance, SubAttendance)
 			}
 		}
-
 		var res float64
-		for i := 0; i < len(SubAttendances); i++ {
-			res += SubAttendances[i]
+		//Create SubjectMap
+		var SubjectMap []int
+		for j := 0; j < len(SubjectCodes); j++ {
+			if SubjectCodes[j] == Students[i].Subjects[j] {
+				SubjectMap = append(SubjectMap, j)
+			}
+		}
+		for k := 0; k < len(SubjectMap); k++ {
+			res += SubAttendances[SubjectMap[k]]
 		}
 		if len(Subjects) != 0 {
 			StudentReport.GrandAttendance = res / float64(len(Subjects))
