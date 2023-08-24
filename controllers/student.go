@@ -70,10 +70,37 @@ func GetAllStudentsBySubject(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	var students []database.Student
 	params := mux.Vars(r)
-	err := dbconn.Preload("Lectures").Where("? =  any(subjects)", params["subject_code"]).Find(&students).Error
-	if err != nil {
-		json.NewEncoder(w).Encode("Invalid ID")
+	year := r.URL.Query().Get("year")
+	division := r.URL.Query().Get("division")
+	batch := r.URL.Query().Get("batch")
+	if year == "" && division == "" && batch == "" {
+		dbconn.Find(&students)
+		json.NewEncoder(w).Encode(&students)
 	} else {
+		querystring := "'" + params["subject_code"] + "' = any(subjects)"
+		if year != "" {
+			if querystring != "" {
+				querystring = querystring + " AND "
+			}
+			querystring += "year = " + year
+		}
+		if division != "" {
+			if querystring != "" {
+				querystring = querystring + " AND "
+			}
+			querystring = querystring + "division = '" + division + "'"
+		}
+		if batch != "" {
+			if querystring != "" {
+				querystring = querystring + " AND "
+			}
+			querystring = querystring + "batch = " + batch
+		}
+		fmt.Println(querystring)
+		err := dbconn.Preload("Lectures").Find(&students, querystring).Error
+		if err != nil {
+			json.NewEncoder(w).Encode(err)
+		}
 		json.NewEncoder(w).Encode(&students)
 	}
 }
