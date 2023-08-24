@@ -196,7 +196,7 @@ func GetAttendanceByYearandDivision(w http.ResponseWriter, r *http.Request) {
 			SubAttendance.TotalLectures = len(TotalLectures)
 			err = dbconn.Table("student_lectures").
 				Joins("JOIN lectures ON student_lectures.lecture_id = lectures.id").
-				Where("student_lectures.student_id = ? AND student_lectures.subject_id = ? AND lectures.date_of_lecture BETWEEN ? AND ?", Students[i].ID, Subjects[j].ID, Report.StartDate, Report.EndDate).
+				Where("student_lectures.attendance = true AND student_lectures.student_id = ? AND student_lectures.subject_id = ? AND lectures.date_of_lecture BETWEEN ? AND ?", Students[i].ID, Subjects[j].ID, Report.StartDate, Report.EndDate).
 				Find(&AttendedLectures).Error
 			if err != nil {
 				fmt.Println(err)
