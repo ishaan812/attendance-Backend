@@ -150,7 +150,7 @@ func GetAttendanceByYearandDivision(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode("Wrong year or division")
 	}
 	//get list of subjects
-	err = dbconn.Where("year = ?", ClassAttendanceRequest.Year).Find(&Subjects).Error
+	err = dbconn.Where("year = ? AND division = ?", ClassAttendanceRequest.Year, ClassAttendanceRequest.Division).Find(&Subjects).Error
 	if err != nil {
 		json.NewEncoder(w).Encode("Wrong year")
 	}
