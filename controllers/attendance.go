@@ -203,7 +203,7 @@ func GetAttendanceByYearandDivision(w http.ResponseWriter, r *http.Request) {
 			}
 			SubAttendance.AttendedLectures = len(AttendedLectures)
 			if SubAttendance.TotalLectures == 0 {
-				SubAttendance.Attendance = 100
+				SubAttendance.Attendance = 0
 				SubAttendances = append(SubAttendances, SubAttendance.Attendance)
 				StudentReport.SubjectAttendance = append(StudentReport.SubjectAttendance, SubAttendance)
 			} else {
@@ -219,7 +219,7 @@ func GetAttendanceByYearandDivision(w http.ResponseWriter, r *http.Request) {
 		var res float64
 		//Create SubjectMap
 		var SubjectMap []int
-		for j := 0; j < len(SubjectCodes); j++ {
+		for j := 0; j < len(Students[i].Subjects); j++ {
 			if SubjectCodes[j] == Students[i].Subjects[j] {
 				SubjectMap = append(SubjectMap, j)
 			}
@@ -227,15 +227,23 @@ func GetAttendanceByYearandDivision(w http.ResponseWriter, r *http.Request) {
 		for k := 0; k < len(SubjectMap); k++ {
 			res += SubAttendances[SubjectMap[k]]
 		}
-		if len(Subjects) != 0 {
-			StudentReport.GrandAttendance = res / float64(len(Subjects))
+		// Active Subjects
+		ActiveSubjects := 0
+		for m := 0; m < len(SubjectMap); m++ {
+			if StudentReport.SubjectAttendance[SubjectMap[m]].TotalLectures != 0 {
+				ActiveSubjects++
+			}
+		}
+		if len(Subjects) != 0 && ActiveSubjects != 0 {
+			StudentReport.GrandAttendance = res / float64(ActiveSubjects)
 			if StudentReport.GrandAttendance < 75 {
 				StudentReport.Status = "Defaulter"
 			} else {
 				StudentReport.Status = "Eligible"
 			}
 		} else {
-			// json.NewEncoder(w).Encode("No Subjects")
+			StudentReport.GrandAttendance = 0
+			StudentReport.Status = "No Lectures in this period"
 		}
 		Report.AttendanceList = append(Report.AttendanceList, StudentReport)
 	}
