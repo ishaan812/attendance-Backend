@@ -20,6 +20,7 @@ type Claims struct {
 type AttendanceQuery struct {
 	LectureID  string `json:"lecture_id"`
 	Attendance []int  `json:"attendance"`
+	SubjectID  string `json:"subject_code"`
 }
 
 // Student
@@ -82,4 +83,5 @@ type TimeTableResponse struct {
 	SubjectName string `json:"subject_name"`
 	Division    string `json:"division,omitempty"`
 	Batch       int    `json:"batch,omitempty"`
+	Year        string `json:"year,omitempty"`
 }
