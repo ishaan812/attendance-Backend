@@ -220,8 +220,10 @@ func GetAttendanceByYearandDivision(w http.ResponseWriter, r *http.Request) {
 		//Create SubjectMap
 		var SubjectMap []int
 		for j := 0; j < len(Students[i].Subjects); j++ {
-			if SubjectCodes[j] == Students[i].Subjects[j] {
-				SubjectMap = append(SubjectMap, j)
+			if y:=0; y < len(SubjectCodes) {
+				if Students[i].Subjects[j] == SubjectCodes[y] {
+					SubjectMap = append(SubjectMap, y)
+				}
 			}
 		}
 		for k := 0; k < len(SubjectMap); k++ {
