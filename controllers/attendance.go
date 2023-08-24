@@ -229,7 +229,7 @@ func GetAttendanceByYearandDivision(w http.ResponseWriter, r *http.Request) {
 				StudentReport.Status = "Eligible"
 			}
 		} else {
-			json.NewEncoder(w).Encode("No Subjects")
+			// json.NewEncoder(w).Encode("No Subjects")
 		}
 		Report.AttendanceList = append(Report.AttendanceList, StudentReport)
 	}

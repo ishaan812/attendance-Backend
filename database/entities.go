@@ -16,7 +16,7 @@ type Student struct {
 	SAPID      int            `json:"sap_id"`
 	Name       string         `json:"name"`
 	Email      string         `json:"email"`
-	Year       int            `json:"year"`
+	Year       string            `json:"year"`
 	Department string         `json:"department"`
 	Division   string         `json:"division"`
 	Batch      int            `json:"batch"`
