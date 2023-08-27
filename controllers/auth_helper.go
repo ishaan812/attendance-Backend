@@ -34,12 +34,13 @@ func LoginUser(Faculty *database.Faculty) (*database.Faculty, error) {
 func RegisterUser(Faculty *database.Faculty) error {
 	err := dbconn.Where("s_api_d = ?", Faculty.SAPID).First(&Faculty).Error
 	if err != nil {
-		bytes, err := bcrypt.GenerateFromPassword([]byte(Faculty.Password), 14)
-		if err != nil {
-			return err
-		} else {
-			Faculty.Password = string(bytes)
-		}
+		// If hashing required for password
+		// bytes, err := bcrypt.GenerateFromPassword([]byte(Faculty.Password), 14)
+		// if err != nil {
+		// 	return err
+		// } else {
+		// 	Faculty.Password = string(bytes)
+		// }
 		dbconn.Create(&Faculty)
 		fmt.Println("INFO: New Faculty ", Faculty.SAPID, " has been registered")
 		return nil
@@ -97,10 +98,10 @@ func ValidateJWT(c *http.Cookie, jwtKey string) (*Claims, error) {
 func RefreshJWT(claims *Claims, jwtKey string) (*http.Cookie, error) {
 	expirationTime := time.Now().Add(tokenValidityDuration)
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"sapid":      claims.SAPID,
-		"name":       claims.Name,
-		"email":      claims.Email,
-		"expiresat":  expirationTime,
+		"sapid":     claims.SAPID,
+		"name":      claims.Name,
+		"email":     claims.Email,
+		"expiresat": expirationTime,
 	})
 	tokenString, err := token.SignedString([]byte(jwtKey))
 	if err != nil {
