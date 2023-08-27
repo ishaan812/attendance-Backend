@@ -9,7 +9,6 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt"
-	"golang.org/x/crypto/bcrypt"
 )
 
 var tokenValidityDuration = 60 * 24 * time.Minute
@@ -21,10 +20,13 @@ func LoginUser(Faculty *database.Faculty) (*database.Faculty, error) {
 		fmt.Println("ERROR: sapid does not exist")
 		return nil, err
 	}
-	err = bcrypt.CompareHashAndPassword([]byte(faculty.Password), []byte(Faculty.Password))
-	if err != nil {
-		fmt.Println("ERROR: Wrong Password Entered")
-		return nil, err
+	// err = bcrypt.CompareHashAndPassword([]byte(faculty.Password), []byte(Faculty.Password))
+	// if err != nil {
+	// 	fmt.Println("ERROR: Wrong Password Entered")
+	// 	return nil, err
+	// }
+	if faculty.Password != Faculty.Password {
+		return nil, errors.New("wrong password entered")
 	}
 	fmt.Println("INFO: ", Faculty.SAPID, " logged in")
 	Faculty = &faculty
