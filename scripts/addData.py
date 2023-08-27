@@ -9,9 +9,9 @@ def get_db_conn():
     conn = psycopg2.connect(
         host="localhost",
         port="5432",
-        database="attendance2",
+        database="attendance-management",
         user="postgres", # Replace postgres user name
-        password="hibye123") # Postgres password
+        password="8007ell") # Postgres password
     return conn
 
 
@@ -46,18 +46,19 @@ def add_data_to_database(record, table_name):
 
 
 def read_csv():
-    table_name = 'time_table_entries'
-    with open(table_name+'.csv', 'r', encoding='utf-8-sig') as file:
-        dict_reader = DictReader(file)
-        records = list(dict_reader)
-        # Remove the BOM character from the first column name
-        column_names = [name.lstrip('\ufeff')
-                        for name in dict_reader.fieldnames]
-        for record in records:
-            # Remove the BOM character from the first key in each record
-            record = {key.lstrip('\ufeff'): val.strip()
-                      for key, val in record.items()}
-            add_data_to_database(record, table_name)
+    table_names=["students","subjects","faculties","time_table_entries"]
+    for table_name in table_names:
+        with open(table_name+'.csv', 'r', encoding='utf-8-sig') as file:
+            dict_reader = DictReader(file)
+            records = list(dict_reader)
+            # Remove the BOM character from the first column name
+            column_names = [name.lstrip('\ufeff')
+                            for name in dict_reader.fieldnames]
+            for record in records:
+                # Remove the BOM character from the first key in each record
+                record = {key.lstrip('\ufeff'): val.strip()
+                        for key, val in record.items()}
+                add_data_to_database(record, table_name)
 
 if __name__ == "__main__":
     db_conn = get_db_conn()
