@@ -10,8 +10,6 @@ import (
 
 // AUTHENTICATION
 func Login(w http.ResponseWriter, r *http.Request) {
-
-	w.Header().Set("Access-Control-Expose-Headers", "Authorization")
 	w.Header().Set("Content-Type", "application/json")
 	var Faculty database.Faculty
 	json.NewDecoder(r.Body).Decode(&Faculty)
@@ -26,7 +24,6 @@ func Login(w http.ResponseWriter, r *http.Request) {
 			json.NewEncoder(w).Encode("JWTError")
 		} else {
 			http.SetCookie(w, JWTCookie)
-			w.Header().Add("Authorization", JWTCookie.Value)
 
 			json.NewEncoder(w).Encode(faculty)
 		}
@@ -34,7 +31,6 @@ func Login(w http.ResponseWriter, r *http.Request) {
 }
 
 func Register(w http.ResponseWriter, r *http.Request) {
-
 	w.Header().Set("Content-Type", "application/json")
 	var Faculty database.Faculty
 	json.NewDecoder(r.Body).Decode(&Faculty)
