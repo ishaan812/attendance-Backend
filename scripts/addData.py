@@ -9,9 +9,9 @@ def get_db_conn():
     conn = psycopg2.connect(
         host="localhost",
         port="5432",
-        database="attendance1",
+        database="attendance2",
         user="postgres", # Replace postgres user name
-        password="Allhailbruno18") # Postgres password
+        password="hibye123") # Postgres password
     return conn
 
 
@@ -46,7 +46,7 @@ def add_data_to_database(record, table_name):
 
 
 def read_csv():
-    table_name = 'students'
+    table_name = 'time_table_entries'
     with open(table_name+'.csv', 'r', encoding='utf-8-sig') as file:
         dict_reader = DictReader(file)
         records = list(dict_reader)

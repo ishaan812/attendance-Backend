@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"os"
 	"service/database"
 )
 
@@ -15,10 +16,18 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	var Faculty database.Faculty
 	json.NewDecoder(r.Body).Decode(&Faculty)
 	faculty, err := LoginUser(&Faculty)
+	fmt.Println(Faculty)
 	if err != nil {
 		json.NewEncoder(w).Encode("AuthError")
 	} else {
-		json.NewEncoder(w).Encode(faculty)
+		JWTCookie, err := CreateJWT(&Faculty)
+		if err != nil {
+			fmt.Println("Error while creating JWT.")
+			json.NewEncoder(w).Encode("JWTError")
+		} else {
+			http.SetCookie(w, JWTCookie)
+			json.NewEncoder(w).Encode(faculty)
+		}
 	}
 }
 
@@ -38,32 +47,32 @@ func Register(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// func Refresh(w http.ResponseWriter, r *http.Request) {
-// 	c, err := r.Cookie("token")
-// 	if err != nil {
-// 		if err == http.ErrNoCookie {
-// 			w.WriteHeader(http.StatusUnauthorized)
-// 			return
-// 		}
-// 		w.WriteHeader(http.StatusBadRequest)
-// 		return
-// 	}
-// 	jwtKey := os.Getenv("JWT_SECRET_KEY")
-// 	claims, err := ValidateJWT(c, jwtKey)
-// 	fmt.Println(claims)
-// 	if err != nil {
-// 		w.WriteHeader(http.StatusUnauthorized)
-// 		return
-// 	}
-// 	JWTCookie, err := RefreshJWT(claims, jwtKey)
-// 	if err != nil {
-// 		w.WriteHeader(http.StatusUnauthorized)
-// 		return
-// 	} else {
-// 		http.SetCookie(w, JWTCookie)
-// 		json.NewEncoder(w).Encode("JWTRefreshed")
-// 	}
-// }
+func Refresh(w http.ResponseWriter, r *http.Request) {
+	c, err := r.Cookie("token")
+	if err != nil {
+		if err == http.ErrNoCookie {
+			w.WriteHeader(http.StatusUnauthorized)
+			return
+		}
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+	jwtKey := os.Getenv("JWT_SECRET_KEY")
+	claims, err := ValidateJWT(c, jwtKey)
+	fmt.Println(claims)
+	if err != nil {
+		w.WriteHeader(http.StatusUnauthorized)
+		return
+	}
+	JWTCookie, err := RefreshJWT(claims, jwtKey)
+	if err != nil {
+		w.WriteHeader(http.StatusUnauthorized)
+		return
+	} else {
+		http.SetCookie(w, JWTCookie)
+		json.NewEncoder(w).Encode("JWTRefreshed")
+	}
+}
 
 func Logout(w http.ResponseWriter, r *http.Request) {
 	c, err := r.Cookie("token")
