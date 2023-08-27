@@ -10,8 +10,7 @@ import (
 )
 
 func CreateStudent(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
 	w.Header().Set("Content-Type", "application/json")
 	var student database.Student
 	json.NewDecoder(r.Body).Decode(&student)
@@ -24,8 +23,7 @@ func CreateStudent(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetAllStudents(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
 	w.Header().Set("Content-Type", "application/json")
 	var student []database.Student
 	year := r.URL.Query().Get("year")
@@ -65,8 +63,7 @@ func GetAllStudents(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetAllStudentsBySubject(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
 	w.Header().Set("Content-Type", "application/json")
 	var students []database.Student
 	params := mux.Vars(r)
@@ -106,8 +103,7 @@ func GetAllStudentsBySubject(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetStudentByID(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
 	w.Header().Set("Content-Type", "application/json")
 	params := mux.Vars(r)
 	var student database.Student
@@ -121,8 +117,7 @@ func GetStudentByID(w http.ResponseWriter, r *http.Request) {
 }
 
 func DeleteStudent(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
 	w.Header().Set("Content-Type", "application/json")
 	var student database.Student
 	params := mux.Vars(r)
@@ -136,8 +131,7 @@ func DeleteStudent(w http.ResponseWriter, r *http.Request) {
 }
 
 func UpdateStudent(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
 	w.Header().Set("Content-Type", "application/json")
 	params := mux.Vars(r)
 	var student database.Student

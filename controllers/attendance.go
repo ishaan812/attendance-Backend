@@ -12,8 +12,7 @@ import (
 )
 
 func MarkAttendance(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
 	w.Header().Set("Content-Type", "application/json")
 	var AttendanceQuery AttendanceQuery
 	var Lecture database.Lecture
@@ -48,8 +47,7 @@ func MarkAttendance(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetLectureAttendance(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
 	w.Header().Set("Content-Type", "application/json")
 	params := mux.Vars(r)
 	var StudentLectures []database.StudentLecture
@@ -64,8 +62,7 @@ func GetLectureAttendance(w http.ResponseWriter, r *http.Request) {
 
 // Add report generation
 func GetAttendanceBySAPID(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
 	w.Header().Set("Content-Type", "application/json")
 	//Destructuring Request
 	var StudentAttendanceRequest StudentAttendanceReq
@@ -136,8 +133,7 @@ func GetAttendanceBySAPID(w http.ResponseWriter, r *http.Request) {
 // input: year and division
 // output: list of students with their attendance in different subjects
 func GetAttendanceByYearandDivision(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
 	w.Header().Set("Content-Type", "application/json")
 	var err error
 	var ClassAttendanceRequest ClassAttendanceReq
@@ -150,7 +146,7 @@ func GetAttendanceByYearandDivision(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode("Wrong year or division")
 	}
 	//get list of subjects
-	err = dbconn.Where("year = ? AND division = ?", ClassAttendanceRequest.Year, ClassAttendanceRequest.Division).Find(&Subjects).Error
+	err = dbconn.Where("year = ?", ClassAttendanceRequest.Year).Find(&Subjects).Error
 	if err != nil {
 		json.NewEncoder(w).Encode("Wrong year")
 	}

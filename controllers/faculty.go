@@ -10,8 +10,7 @@ import (
 )
 
 func CreateFaculty(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
 	w.Header().Set("Content-Type", "application/json")
 	var faculty database.Faculty
 	json.NewDecoder(r.Body).Decode(&faculty)
@@ -24,8 +23,7 @@ func CreateFaculty(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetAllFaculties(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
 	w.Header().Set("Content-Type", "application/json")
 	var faculty []database.Faculty
 	err := dbconn.Find(&faculty).Error
@@ -36,8 +34,7 @@ func GetAllFaculties(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetFacultyByID(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
 	w.Header().Set("Content-Type", "application/json")
 	params := mux.Vars(r)
 	var faculty database.Faculty
@@ -51,8 +48,7 @@ func GetFacultyByID(w http.ResponseWriter, r *http.Request) {
 }
 
 func DeleteFaculty(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
 	w.Header().Set("Content-Type", "application/json")
 	var faculty database.Faculty
 	params := mux.Vars(r)
@@ -66,8 +62,7 @@ func DeleteFaculty(w http.ResponseWriter, r *http.Request) {
 }
 
 func UpdateFaculty(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
 	w.Header().Set("Content-Type", "application/json")
 	params := mux.Vars(r)
 	var faculty database.Faculty
@@ -81,7 +76,7 @@ func UpdateFaculty(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetSubjectsByFaculty(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
+
 	w.Header().Set("Content-Type", "application/json")
 	params := mux.Vars(r)
 	var faculty database.Faculty

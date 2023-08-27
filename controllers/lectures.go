@@ -11,8 +11,7 @@ import (
 )
 
 func CreateLecture(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
 	w.Header().Set("Content-Type", "application/json")
 	var lecture database.Lecture
 	json.NewDecoder(r.Body).Decode(&lecture)
@@ -24,7 +23,7 @@ func CreateLecture(w http.ResponseWriter, r *http.Request) {
 }
 
 func CreateLecturewithSubjectCode(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
+
 	w.Header().Set("Access-Control-Allow-Headers", "*")
 	w.Header().Set("Content-Type", "application/json")
 	params := mux.Vars(r)
@@ -45,8 +44,7 @@ func CreateLecturewithSubjectCode(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetAllLectures(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
 	w.Header().Set("Content-Type", "application/json")
 	var lectures []database.Lecture
 
@@ -58,8 +56,7 @@ func GetAllLectures(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetLectureByID(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
 	w.Header().Set("Content-Type", "application/json")
 	params := mux.Vars(r)
 	var lecture database.Lecture
@@ -72,8 +69,7 @@ func GetLectureByID(w http.ResponseWriter, r *http.Request) {
 }
 
 func DeleteLecture(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
 	w.Header().Set("Content-Type", "application/json")
 	var lecture database.Lecture
 	params := mux.Vars(r)
@@ -87,8 +83,7 @@ func DeleteLecture(w http.ResponseWriter, r *http.Request) {
 }
 
 func UpdateLecture(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
 	w.Header().Set("Content-Type", "application/json")
 	params := mux.Vars(r)
 	var lecture database.Lecture
@@ -102,8 +97,7 @@ func UpdateLecture(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetLecturesBySubject(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
 	w.Header().Set("Content-Type", "application/json")
 	params := mux.Vars(r)
 	var subject database.Subject
@@ -121,8 +115,7 @@ func GetLecturesBySubject(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetLecturesByFaculty(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
 	w.Header().Set("Content-Type", "application/json")
 	params := mux.Vars(r)
 	faculty_id, err := uuid.Parse(params["id"])
@@ -138,8 +131,7 @@ func GetLecturesByFaculty(w http.ResponseWriter, r *http.Request) {
 }
 
 func FetchLecture(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
 	w.Header().Set("Content-Type", "application/json")
 	var lectures database.Lecture
 	var FetchLectureRequest FetchLectureReq

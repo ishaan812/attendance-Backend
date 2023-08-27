@@ -10,8 +10,7 @@ import (
 )
 
 func CreateTimeTableEntry(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
 	w.Header().Set("Content-Type", "application/json")
 	var timetableentry database.TimeTableEntry
 	json.NewDecoder(r.Body).Decode(&timetableentry)
@@ -24,8 +23,7 @@ func CreateTimeTableEntry(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetAllTimeTableEntriesforFaculty(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
 	w.Header().Set("Content-Type", "application/json")
 	var timetableentries []database.TimeTableEntry
 	var timetableresponse []TimeTableResponse
@@ -51,8 +49,7 @@ func GetAllTimeTableEntriesforFaculty(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetAllTimeTableEntries(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
 	w.Header().Set("Content-Type", "application/json")
 	var timetableentry []database.TimeTableEntry
 	err := dbconn.Preload("Subjects").Find(&timetableentry).Error
@@ -63,8 +60,7 @@ func GetAllTimeTableEntries(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetTimeTableEntryByID(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
 	w.Header().Set("Content-Type", "application/json")
 	params := mux.Vars(r)
 	var timetableentry database.TimeTableEntry
@@ -78,8 +74,7 @@ func GetTimeTableEntryByID(w http.ResponseWriter, r *http.Request) {
 }
 
 func DeleteTimeTableEntry(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
 	w.Header().Set("Content-Type", "application/json")
 	var timetableentry database.TimeTableEntry
 	params := mux.Vars(r)
@@ -93,8 +88,7 @@ func DeleteTimeTableEntry(w http.ResponseWriter, r *http.Request) {
 }
 
 func UpdateTimeTableEntry(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
 	w.Header().Set("Content-Type", "application/json")
 	params := mux.Vars(r)
 	var timetableentry database.TimeTableEntry

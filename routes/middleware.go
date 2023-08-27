@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"fmt"
 	"net/http"
 	"os"
 
@@ -10,6 +11,7 @@ import (
 func jwtMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		tokenString, helloerror := r.Cookie("token")
+
 		// if tokenString == "" {
 		// 	http.Error(w, "Unauthorized", http.StatusUnauthorized)
 		// 	return
@@ -25,14 +27,45 @@ func jwtMiddleware(next http.Handler) http.Handler {
 			return
 		}
 		tokenStr := tokenString.Value
+
 		token, err := jwt.Parse(tokenStr, func(token *jwt.Token) (interface{}, error) {
 			return []byte(os.Getenv("JWT_SECRET_KEY")), nil
 		})
-		if err != nil || !token.Valid {
-			http.Error(w, "Unauthorized", http.StatusUnauthorized)
+
+		if !token.Valid {
+			w.WriteHeader(http.StatusUnauthorized)
 			return
 		}
+		fmt.Println("Hi hi hi")
+		if err != nil {
+			if err == jwt.ErrSignatureInvalid {
+				w.WriteHeader(http.StatusUnauthorized)
+				return
+			}
+			w.WriteHeader(http.StatusBadRequest)
+			return
+		}
+
 		// Token is valid, call the next handler
 		next.ServeHTTP(w, r)
 	})
 }
+
+// func jwtMiddleware(next http.Handler) http.Handler {
+// 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+// 		tokenString := r.Header.Get("Authorization")
+// 		if tokenString == "" {
+// 			http.Error(w, "Unauthorized", http.StatusUnauthorized)
+// 			return
+// 		}
+// 		token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+// 			return []byte(os.Getenv("JWT_SECRET_KEY")), nil
+// 		})
+// 		if err != nil || !token.Valid {
+// 			http.Error(w, "Unauthorized", http.StatusUnauthorized)
+// 			return
+// 		}
+// 		// Token is valid, call the next handler
+// 		next.ServeHTTP(w, r)
+// 	})
+// }

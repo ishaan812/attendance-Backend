@@ -13,9 +13,10 @@ import (
 func InitializeRouter() {
 
 	r := mux.NewRouter()
-	headers := handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization"})
+	headers := handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization", "Set-Cookie"})
 	methods := handlers.AllowedMethods([]string{"GET", "POST", "PUT", "DELETE", "OPTIONS"})
-	origins := handlers.AllowedOrigins([]string{"*"})
+	origins := handlers.AllowedOrigins([]string{"http://localhost:3000"})
+	credentials := handlers.AllowCredentials()
 
 	r.Handle("/student", jwtMiddleware(http.HandlerFunc(controllers.CreateStudent))).Methods("POST", "OPTIONS")
 	r.Handle("/getAllStudents", jwtMiddleware(http.HandlerFunc(controllers.GetAllStudents))).Methods("GET")
@@ -66,7 +67,7 @@ func InitializeRouter() {
 	r.Handle("/getClassAttendance", jwtMiddleware(http.HandlerFunc(controllers.GetAttendanceByYearandDivision))).Methods("POST", "OPTIONS")
 
 	fmt.Print("Server running on localhost:9000\n")
-	serverErr := http.ListenAndServe("localhost:9000", handlers.CORS(headers, methods, origins)(r))
+	serverErr := http.ListenAndServe("localhost:9000", handlers.CORS(headers, methods, origins, credentials)(r))
 	// serverErr := http.ListenAndServe("192.168.155.165:9000", handlers.CORS(headers, methods, origins)(r))
 	if serverErr != nil {
 		log.Fatal(serverErr)

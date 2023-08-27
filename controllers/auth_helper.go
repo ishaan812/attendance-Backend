@@ -60,11 +60,10 @@ func LogoutUser(c *http.Cookie) error {
 func CreateJWT(Faculty *database.Faculty) (*http.Cookie, error) {
 	expirationTime := time.Now().Add(tokenValidityDuration)
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"sapid":      Faculty.SAPID,
-		"name":       Faculty.Name,
-		"email":      Faculty.Email,
-		"expiresat":  expirationTime,
-		"department": Faculty.Department,
+		"sapid":     Faculty.SAPID,
+		"name":      Faculty.Name,
+		"email":     Faculty.Email,
+		"expiresat": expirationTime,
 	})
 	tokenString, err := token.SignedString([]byte(os.Getenv("JWT_SECRET_KEY")))
 	if err != nil {

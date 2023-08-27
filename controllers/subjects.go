@@ -10,8 +10,7 @@ import (
 )
 
 func CreateSubject(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
 	w.Header().Set("Content-Type", "application/json")
 	var subject database.Subject
 	json.NewDecoder(r.Body).Decode(&subject)
@@ -24,8 +23,7 @@ func CreateSubject(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetAllSubjects(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
 	w.Header().Set("Content-Type", "application/json")
 	var subjects []database.Subject
 	err := dbconn.Find(&subjects).Error
@@ -36,8 +34,7 @@ func GetAllSubjects(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetSubjectByID(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
 	w.Header().Set("Content-Type", "application/json")
 	params := mux.Vars(r)
 	var subject database.Subject
@@ -51,8 +48,7 @@ func GetSubjectByID(w http.ResponseWriter, r *http.Request) {
 }
 
 func DeleteSubject(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
 	w.Header().Set("Content-Type", "application/json")
 	var subject database.Subject
 	params := mux.Vars(r)
@@ -66,8 +62,7 @@ func DeleteSubject(w http.ResponseWriter, r *http.Request) {
 }
 
 func UpdateSubject(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
 	w.Header().Set("Content-Type", "application/json")
 	params := mux.Vars(r)
 	var subject database.Subject
@@ -81,8 +76,7 @@ func UpdateSubject(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetSubjectBySubjectCode(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
 	w.Header().Set("Content-Type", "application/json")
 	params := mux.Vars(r)
 	var subject database.Subject
@@ -96,8 +90,8 @@ func GetSubjectBySubjectCode(w http.ResponseWriter, r *http.Request) {
 }
 
 // func GetSubjectByFacultyID(w http.ResponseWriter, r *http.Request) {
-// 	w.Header().Set("Access-Control-Allow-Origin", "*")
-// 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+//
+//
 // 	w.Header().Set("Content-Type", "application/json")
 // 	params := mux.Vars(r)
 // 	var subject []database.Subject
