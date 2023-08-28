@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"service/controllers"
 
 	"github.com/gorilla/handlers"
@@ -66,8 +67,8 @@ func InitializeRouter() {
 	r.Handle("/getStudentAttendance", jwtMiddleware(http.HandlerFunc(controllers.GetAttendanceBySAPID))).Methods("POST", "OPTIONS")
 	r.Handle("/getClassAttendance", jwtMiddleware(http.HandlerFunc(controllers.GetAttendanceByYearandDivision))).Methods("POST", "OPTIONS")
 
-	fmt.Print("Server running on localhost:9000\n")
-	serverErr := http.ListenAndServe("localhost:9000", handlers.CORS(headers, methods, origins, credentials)(r))
+	fmt.Println("Server running on localhost:" + os.Getenv("PORT") + "\n")
+	serverErr := http.ListenAndServe(":"+os.Getenv("PORT"), handlers.CORS(headers, methods, origins, credentials)(r))
 	// serverErr := http.ListenAndServe("192.168.155.165:9000", handlers.CORS(headers, methods, origins)(r))
 	if serverErr != nil {
 		log.Fatal(serverErr)
