@@ -61,7 +61,7 @@ func InitializeRouter() {
 	// r.HandleFunc("/refresh", controllers.Refresh).Methods("GET")
 
 	r.Handle("/markAttendance", jwtMiddleware(http.HandlerFunc(controllers.MarkAttendance))).Methods("PUT")
-	r.Handle("/getLectureAttendance/{id}", jwtMiddleware(http.HandlerFunc(controllers.GetLectureAttendance))).Methods("POST", "OPTIONS")
+	r.Handle("/getLectureAttendance/{id}", jwtMiddleware(http.HandlerFunc(controllers.GetLectureAttendance))).Methods("GET")
 	r.Handle("/getSubjectsbyFaculty/{id}", jwtMiddleware(http.HandlerFunc(controllers.GetSubjectsByFaculty))).Methods("GET")
 	r.Handle("/getStudentAttendance", jwtMiddleware(http.HandlerFunc(controllers.GetAttendanceBySAPID))).Methods("POST", "OPTIONS")
 	r.Handle("/getClassAttendance", jwtMiddleware(http.HandlerFunc(controllers.GetAttendanceByYearandDivision))).Methods("POST", "OPTIONS")
