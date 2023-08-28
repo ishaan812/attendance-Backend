@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres
+    container_name: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: hibye123
+      POSTGRES_DB: attendance
+    ports:
+      - "5432:5432"
+
+  app:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    environment:
+      - DATABASE_CONNECTION_STRING = postgres://postgres:hibye123@localhost:5432/attendance
+      - JWT_SECRET_KEY= secret12345
+    ports:
+      - 9000:9000
+    depends_on:
+      - postgres
+    links:
+      - postgres
+

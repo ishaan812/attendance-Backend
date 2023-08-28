@@ -10,6 +10,7 @@ import (
 var DB *gorm.DB
 
 func InitialMigration(DNS string) *gorm.DB {
+	DNS = "postgres://wtqvvruq:JzaV0KL0JuldyFmKie-06OXkkSeNdLRV@rain.db.elephantsql.com/wtqvvruq"
 	DB, err := gorm.Open(postgres.Open(DNS), &gorm.Config{})
 	if err != nil {
 		panic("Failed to connect to database")
