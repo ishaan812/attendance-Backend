@@ -1,0 +1,6 @@
+﻿day,start_time,end_time,type,subject_id,division,batch,faculty_id
+Monday,10:30 AM,11:30 AM,theory,DJ19ITC503,I1,1,b664ad75-3773-406e-8221-d0a933a52c4f
+Tuesday,8:00 AM,10:00 AM,practical,DJ19ITC503,I1,1,b664ad75-3773-406e-8221-d0a933a52c4f
+Wednesday,10:00 AM,12:00 PM,practical,DJ19ITC503,I1,1,b664ad75-3773-406e-8221-d0a933a52c4f
+Friday,10:00 AM,11:00 AM,theory,DJ19ITC503,I1,1,b664ad75-3773-406e-8221-d0a933a52c4f
+Saturday,11:30 AM,12:30 PM,theory,DJ19ITC503,I1,1,b664ad75-3773-406e-8221-d0a933a52c4f

@@ -71,9 +71,11 @@ func CreateJWT(Faculty *database.Faculty) (*http.Cookie, error) {
 		return nil, err
 	}
 	JWTCookie := &http.Cookie{
-		Name:    "token",
-		Value:   tokenString,
-		Expires: expirationTime,
+		HttpOnly: true,
+		Secure:   true,
+		Name:     "token",
+		Value:    tokenString,
+		Expires:  expirationTime,
 	}
 	fmt.Println("INFO: JWT of ", Faculty.SAPID, " generated with expiration time ", expirationTime)
 	return JWTCookie, nil
