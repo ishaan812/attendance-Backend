@@ -68,8 +68,20 @@ func GetAllStudentsBySubject(w http.ResponseWriter, r *http.Request) {
 	var students []database.Student
 	params := mux.Vars(r)
 	year := r.URL.Query().Get("year")
+	lectureID := r.URL.Query().Get("lecture_id")
+	var lecture database.Lecture
+
+	err := dbconn.Where("id = ?", lectureID).First(&lecture).Error
+	if err != nil {
+		json.NewEncoder(w).Encode("Invalid Lecture ID")
+		return
+	}
+
+	lectureType := lecture.Type
+
 	division := r.URL.Query().Get("division")
 	batch := r.URL.Query().Get("batch")
+
 	if year == "" && division == "" && batch == "" {
 		dbconn.Find(&students)
 		json.NewEncoder(w).Encode(&students)
@@ -87,12 +99,15 @@ func GetAllStudentsBySubject(w http.ResponseWriter, r *http.Request) {
 			}
 			querystring = querystring + "division = '" + division + "'"
 		}
-		if batch != "" {
-			if querystring != "" {
-				querystring = querystring + " AND "
+		if lectureType == "practical" {
+			if batch != "" {
+				if querystring != "" {
+					querystring = querystring + " AND "
+				}
+				querystring = querystring + "batch = '" + batch + "'"
 			}
-			querystring = querystring + "batch = '" + batch + "'"
 		}
+
 		fmt.Println(querystring)
 		err := dbconn.Preload("Lectures").Find(&students, querystring).Error
 		if err != nil {

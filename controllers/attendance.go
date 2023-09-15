@@ -133,7 +133,6 @@ func GetAttendanceBySAPID(w http.ResponseWriter, r *http.Request) {
 // input: year and division
 // output: list of students with their attendance in different subjects
 func GetAttendanceByYearandDivision(w http.ResponseWriter, r *http.Request) {
-
 	w.Header().Set("Content-Type", "application/json")
 	var err error
 	var ClassAttendanceRequest ClassAttendanceReq
@@ -176,23 +175,38 @@ func GetAttendanceByYearandDivision(w http.ResponseWriter, r *http.Request) {
 		StudentReport.StudentName = Students[i].Name
 		StudentReport.Subjects = Students[i].Subjects
 		for j := 0; j < len(Subjects); j++ {
+
 			var SubAttendance SubjectAttendance
 			SubAttendance.SubjectName = Subjects[j].Name
 			SubAttendance.SubjectCode = Subjects[j].ID
-			var TotalLectures []database.StudentLecture
+			var TotalTheoryLectures []database.StudentLecture
+			var TotalPracticalLectures []database.StudentLecture
 			var AttendedLectures []database.StudentLecture
+
 			err := dbconn.Table("student_lectures").
 				Joins("JOIN lectures ON student_lectures.lecture_id = lectures.id").
 				Select("DISTINCT student_lectures.lecture_id").
-				Where("student_lectures.subject_id = ? AND lectures.date_of_lecture BETWEEN ? AND ?", Subjects[j].ID, Report.StartDate, Report.EndDate).
-				Find(&TotalLectures).Error
+				Where("student_lectures.subject_id = ? AND lectures.type = ? AND lectures.date_of_lecture BETWEEN ? AND ?", Subjects[j].ID, "theory", Report.StartDate, Report.EndDate).
+				Find(&TotalTheoryLectures).Error
+
 			if err != nil {
 				fmt.Println(err)
 			}
-			SubAttendance.TotalLectures = len(TotalLectures)
+
+			err1 := dbconn.Table("student_lectures").
+				Joins("JOIN lectures ON student_lectures.lecture_id = lectures.id").
+				Select("DISTINCT student_lectures.lecture_id").
+				Where("student_lectures.subject_id = ? AND lectures.type = ? AND lectures.batch = ? AND lectures.date_of_lecture BETWEEN ? AND ?", Subjects[j].ID, "practical", Students[i].Batch, Report.StartDate, Report.EndDate).
+				Find(&TotalPracticalLectures).Error
+
+			if err1 != nil {
+				fmt.Println(err1)
+			}
+
+			SubAttendance.TotalLectures = len(TotalTheoryLectures) + len(TotalPracticalLectures)
 			err = dbconn.Table("student_lectures").
 				Joins("JOIN lectures ON student_lectures.lecture_id = lectures.id").
-				Where("student_lectures.attendance = true AND student_lectures.student_id = ? AND student_lectures.subject_id = ? AND lectures.date_of_lecture BETWEEN ? AND ?", Students[i].ID, Subjects[j].ID, Report.StartDate, Report.EndDate).
+				Where("student_lectures.attendance = true AND  student_lectures.student_id = ? AND student_lectures.subject_id = ? AND lectures.date_of_lecture BETWEEN ? AND ?", Students[i].ID, Subjects[j].ID, Report.StartDate, Report.EndDate).
 				Find(&AttendedLectures).Error
 			if err != nil {
 				fmt.Println(err)
