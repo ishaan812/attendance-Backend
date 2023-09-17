@@ -7,10 +7,13 @@ from csv import DictReader
 
 def get_db_conn():
     conn = psycopg2.connect(
-        host="rain.db.elephantsql.com",
-        database="wtqvvruq",
-        user="wtqvvruq", # Replace postgres user name
-        password="JzaV0KL0JuldyFmKie-06OXkkSeNdLRV") # Postgres password
+        dbname='defaultdb',
+        user='avnadmin',
+        password='AVNS_SZf2jU48gnbwNRB3Tyx',
+        host='attendance-management-system-ishaan-3928.aivencloud.com',
+        port='14449',
+        sslmode='require'
+        ) # Postgres password
     return conn
 
 def cleanup_all_tables(db_conn, table_list):
