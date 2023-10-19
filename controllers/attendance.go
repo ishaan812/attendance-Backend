@@ -154,6 +154,10 @@ func GetAttendanceByYearandDivision(w http.ResponseWriter, r *http.Request) {
 	for i := 0; i < len(Subjects); i++ {
 		SubjectCodes = append(SubjectCodes, Subjects[i].ID)
 	}
+	SubjectNames := []string{}
+	for i := 0; i < len(Subjects); i++ {
+		SubjectNames = append(SubjectNames, Subjects[i].Name)
+	}
 	var Report DivisionReport
 	Report.Year = ClassAttendanceRequest.Year
 	Report.Division = ClassAttendanceRequest.Division
@@ -211,11 +215,11 @@ func GetAttendanceByYearandDivision(w http.ResponseWriter, r *http.Request) {
 
 			err = dbconn.Table("student_lectures").
 				Joins("JOIN lectures ON student_lectures.lecture_id = lectures.id").
-				Where("student_lectures.attendance = true AND lectures.type = ? AND student_lectures.student_id = ? AND student_lectures.subject_id = ? AND lectures.date_of_lecture BETWEEN ? AND ?", Students[i].ID, "theory", Subjects[j].ID, Report.StartDate, Report.EndDate).
+				Where("student_lectures.attendance = true  AND student_lectures.student_id = ? AND lectures.type = ? AND student_lectures.subject_id = ? AND lectures.date_of_lecture BETWEEN ? AND ?", Students[i].ID, "theory", Subjects[j].ID, Report.StartDate, Report.EndDate).
 				Find(&TheoryLectures).Error
 			err = dbconn.Table("student_lectures").
 				Joins("JOIN lectures ON student_lectures.lecture_id = lectures.id").
-				Where("student_lectures.attendance = true AND lectures.type = ? AND student_lectures.student_id = ? AND student_lectures.subject_id = ? AND lectures.date_of_lecture BETWEEN ? AND ?", Students[i].ID, "practical", Subjects[j].ID, Report.StartDate, Report.EndDate).
+				Where("student_lectures.attendance = true  AND student_lectures.student_id = ? AND lectures.type = ? AND student_lectures.subject_id = ? AND lectures.date_of_lecture BETWEEN ? AND ?", Students[i].ID, "practical", Subjects[j].ID, Report.StartDate, Report.EndDate).
 				Find(&PracticalLectures).Error
 			if err != nil {
 				fmt.Println(err)
@@ -224,33 +228,19 @@ func GetAttendanceByYearandDivision(w http.ResponseWriter, r *http.Request) {
 			SubAttendance.PracticalLectures = len(PracticalLectures)
 			if SubAttendance.TotalTheoryLectures == 0 {
 				SubAttendance.TheoryAttendance = 0
-				SubAttendances = append(SubAttendances, SubAttendance.TheoryAttendance)
-				StudentReport.SubjectAttendance = append(StudentReport.SubjectAttendance, SubAttendance)
 			} else {
-				if SubAttendance.TotalTheoryLectures != 0 {
-					SubAttendance.TheoryAttendance = (float64(SubAttendance.TheoryLectures) / float64(SubAttendance.TotalTheoryLectures)) * 100
-				} else {
-					SubAttendance.TheoryAttendance = 0
-					SubAttendance.PracticalAttendance = 0
-				}
-				SubAttendances = append(SubAttendances, SubAttendance.TheoryAttendance)
-				StudentReport.SubjectAttendance = append(StudentReport.SubjectAttendance, SubAttendance)
+				SubAttendance.TheoryAttendance = (float64(SubAttendance.TheoryLectures) / float64(SubAttendance.TotalTheoryLectures)) * 100
 			}
+			SubAttendances = append(SubAttendances, SubAttendance.TheoryAttendance)
 
 			if SubAttendance.TotalPracticalLectures == 0 {
 				SubAttendance.PracticalAttendance = 0
-				SubAttendances = append(SubAttendances, SubAttendance.PracticalAttendance)
-				StudentReport.SubjectAttendance = append(StudentReport.SubjectAttendance, SubAttendance)
 			} else {
-				if SubAttendance.TotalPracticalLectures != 0 {
-					SubAttendance.PracticalAttendance = (float64(SubAttendance.PracticalLectures) / float64(SubAttendance.TotalPracticalLectures)) * 100
-				} else {
-					SubAttendance.PracticalAttendance = 0
-					SubAttendance.PracticalAttendance = 0
-				}
-				SubAttendances = append(SubAttendances, SubAttendance.PracticalAttendance)
-				StudentReport.SubjectAttendance = append(StudentReport.SubjectAttendance, SubAttendance)
+				SubAttendance.PracticalAttendance = (float64(SubAttendance.PracticalLectures) / float64(SubAttendance.TotalPracticalLectures)) * 100
 			}
+			SubAttendances = append(SubAttendances, SubAttendance.PracticalAttendance)
+			StudentReport.SubjectAttendance = append(StudentReport.SubjectAttendance, SubAttendance)
+
 		}
 		var res float64
 		var SubjectMap []int
