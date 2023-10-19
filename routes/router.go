@@ -64,7 +64,7 @@ func InitializeRouter() {
 	r.Handle("/markAttendance", http.HandlerFunc(controllers.MarkAttendance)).Methods("PUT")
 	r.Handle("/getLectureAttendance/{id}", http.HandlerFunc(controllers.GetLectureAttendance)).Methods("GET")
 	r.Handle("/getSubjectsbyFaculty/{id}", http.HandlerFunc(controllers.GetSubjectsByFaculty)).Methods("GET")
-	r.Handle("/getStudentAttendance", http.HandlerFunc(controllers.GetAttendanceBySAPID)).Methods("POST", "OPTIONS")
+	// r.Handle("/getStudentAttendance", http.HandlerFunc(controllers.GetAttendanceBySAPID)).Methods("POST", "OPTIONS")
 	r.Handle("/getClassAttendance", http.HandlerFunc(controllers.GetAttendanceByYearandDivision)).Methods("POST", "OPTIONS")
 
 	fmt.Println("Server running on localhost:" + os.Getenv("PORT") + "\n")

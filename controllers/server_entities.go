@@ -56,11 +56,14 @@ type ClassAttendanceReq struct {
 }
 
 type SubjectAttendance struct {
-	SubjectName      string  `json:"subject_name"`
-	SubjectCode      string  `json:"subject_code"`
-	TotalLectures    int     `json:"total_lectures"`
-	AttendedLectures int     `json:"attended_lectures"`
-	Attendance       float64 `json:"attendance"`
+	SubjectName            string  `json:"subject_name"`
+	SubjectCode            string  `json:"subject_code"`
+	TotalTheoryLectures    int     `json:"total_theory"`
+	TotalPracticalLectures int     `json:"total_practical"`
+	TheoryLectures         int     `json:"attended_theoryLectures"`
+	PracticalLectures      int     `json:"attended_practicalLectures"`
+	TheoryAttendance       float64 `json:"attendance_theory"`
+	PracticalAttendance    float64 `json:"attendance_practical"`
 }
 
 // Lecture

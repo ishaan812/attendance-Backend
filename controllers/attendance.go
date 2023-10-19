@@ -61,74 +61,74 @@ func GetLectureAttendance(w http.ResponseWriter, r *http.Request) {
 }
 
 // Add report generation
-func GetAttendanceBySAPID(w http.ResponseWriter, r *http.Request) {
+// func GetAttendanceBySAPID(w http.ResponseWriter, r *http.Request) {
 
-	w.Header().Set("Content-Type", "application/json")
-	//Destructuring Request
-	var StudentAttendanceRequest StudentAttendanceReq
-	var Student database.Student
-	json.NewDecoder(r.Body).Decode(&StudentAttendanceRequest)
-	//Find StudentID by SAPID
-	err := dbconn.Where("s_api_d = ?", StudentAttendanceRequest.SAPID).First(&Student).Error
-	if err != nil {
-		json.NewEncoder(w).Encode("Wrong SAPID")
-	}
-	//Get Subjects for Student based on year
-	var Subjects []database.Subject
-	err = dbconn.Where("year = ?", Student.Year).Find(&Subjects).Error
-	if err != nil {
-		json.NewEncoder(w).Encode("Wrong year")
-	}
+// 	w.Header().Set("Content-Type", "application/json")
+// 	//Destructuring Request
+// 	var StudentAttendanceRequest StudentAttendanceReq
+// 	var Student database.Student
+// 	json.NewDecoder(r.Body).Decode(&StudentAttendanceRequest)
+// 	//Find StudentID by SAPID
+// 	err := dbconn.Where("s_api_d = ?", StudentAttendanceRequest.SAPID).First(&Student).Error
+// 	if err != nil {
+// 		json.NewEncoder(w).Encode("Wrong SAPID")
+// 	}
+// 	//Get Subjects for Student based on year
+// 	var Subjects []database.Subject
+// 	err = dbconn.Where("year = ?", Student.Year).Find(&Subjects).Error
+// 	if err != nil {
+// 		json.NewEncoder(w).Encode("Wrong year")
+// 	}
 
-	var Report StudentAttendanceReport
-	var SubAttendances []float64
-	Report.SAPID = Student.SAPID
-	Report.StudentName = Student.Name
+// 	var Report StudentAttendanceReport
+// 	var SubAttendances []float64
+// 	Report.SAPID = Student.SAPID
+// 	Report.StudentName = Student.Name
 
-	for i := 0; i < len(Subjects); i++ {
-		var SubAttendance SubjectAttendance
-		SubAttendance.SubjectName = Subjects[i].Name
-		SubAttendance.SubjectCode = Subjects[i].ID
-		var TotalLectures []database.StudentLecture
-		var AttendedLectures []database.StudentLecture
-		err := dbconn.Preload("Lecture").Where("subject_id = ?", Subjects[i].ID).Find(&TotalLectures).Error
-		if err != nil {
-			fmt.Println(err)
-		}
-		SubAttendance.TotalLectures = len(TotalLectures)
-		err = dbconn.Preload("Lecture").Where("student_id = ? AND subject_id = ?", Student.ID, Subjects[i].ID).Find(&AttendedLectures).Error
-		if err != nil {
-			fmt.Println(err)
-		}
-		SubAttendance.AttendedLectures = len(AttendedLectures)
-		if SubAttendance.TotalLectures == 0 {
-			json.NewEncoder(w).Encode("No Lectures for this subject")
-		} else {
-			if SubAttendance.TotalLectures != 0 {
-				SubAttendance.Attendance = (float64(SubAttendance.AttendedLectures) / float64(SubAttendance.TotalLectures)) * 100
-			} else {
-				SubAttendance.Attendance = 0
-			}
-			SubAttendances = append(SubAttendances, SubAttendance.Attendance)
-			Report.SubjectAttendance = append(Report.SubjectAttendance, SubAttendance)
-		}
-	}
-	var res float64
-	for i := 0; i < len(SubAttendances); i++ {
-		res += SubAttendances[i]
-	}
-	if len(Subjects) != 0 {
-		Report.GrandAttendance = res / float64(len(Subjects))
-		if Report.GrandAttendance < 75 {
-			Report.Status = "Defaulter"
-		} else {
-			Report.Status = "Eligible"
-		}
-		json.NewEncoder(w).Encode(&Report)
-	} else {
-		json.NewEncoder(w).Encode("No Subjects")
-	}
-}
+// 	for i := 0; i < len(Subjects); i++ {
+// 		var SubAttendance SubjectAttendance
+// 		SubAttendance.SubjectName = Subjects[i].Name
+// 		SubAttendance.SubjectCode = Subjects[i].ID
+// 		var TotalLectures []database.StudentLecture
+// 		var AttendedLectures []database.StudentLecture
+// 		err := dbconn.Preload("Lecture").Where("subject_id = ?", Subjects[i].ID).Find(&TotalLectures).Error
+// 		if err != nil {
+// 			fmt.Println(err)
+// 		}
+// 		SubAttendance.TotalLectures = len(TotalLectures)
+// 		err = dbconn.Preload("Lecture").Where("student_id = ? AND subject_id = ? AND ", Student.ID, Subjects[i].ID).Find(&AttendedLectures).Error
+// 		if err != nil {
+// 			fmt.Println(err)
+// 		}
+// 		SubAttendance.AttendedLectures = len(AttendedLectures)
+// 		if SubAttendance.TotalLectures == 0 {
+// 			json.NewEncoder(w).Encode("No Lectures for this subject")
+// 		} else {
+// 			if SubAttendance.TotalLectures != 0 {
+// 				SubAttendance.Attendance = (float64(SubAttendance.AttendedLectures) / float64(SubAttendance.TotalLectures)) * 100
+// 			} else {
+// 				SubAttendance.Attendance = 0
+// 			}
+// 			SubAttendances = append(SubAttendances, SubAttendance.Attendance)
+// 			Report.SubjectAttendance = append(Report.SubjectAttendance, SubAttendance)
+// 		}
+// 	}
+// 	var res float64
+// 	for i := 0; i < len(SubAttendances); i++ {
+// 		res += SubAttendances[i]
+// 	}
+// 	if len(Subjects) != 0 {
+// 		Report.GrandAttendance = res / float64(len(Subjects))
+// 		if Report.GrandAttendance < 75 {
+// 			Report.Status = "Defaulter"
+// 		} else {
+// 			Report.Status = "Eligible"
+// 		}
+// 		json.NewEncoder(w).Encode(&Report)
+// 	} else {
+// 		json.NewEncoder(w).Encode("No Subjects")
+// 	}
+// }
 
 // input: year and division
 // output: list of students with their attendance in different subjects
@@ -139,6 +139,7 @@ func GetAttendanceByYearandDivision(w http.ResponseWriter, r *http.Request) {
 	json.NewDecoder(r.Body).Decode(&ClassAttendanceRequest)
 	var Students []database.Student
 	var Subjects []database.Subject
+
 	//get list of students
 	err = dbconn.Where("year = ? AND division = ?", ClassAttendanceRequest.Year, ClassAttendanceRequest.Division).Find(&Students).Error
 	if err != nil {
@@ -182,7 +183,8 @@ func GetAttendanceByYearandDivision(w http.ResponseWriter, r *http.Request) {
 			SubAttendance.SubjectCode = Subjects[j].ID
 			var TotalTheoryLectures []database.StudentLecture
 			var TotalPracticalLectures []database.StudentLecture
-			var AttendedLectures []database.StudentLecture
+			var TheoryLectures []database.StudentLecture
+			var PracticalLectures []database.StudentLecture
 
 			err := dbconn.Table("student_lectures").
 				Joins("JOIN lectures ON student_lectures.lecture_id = lectures.id").
@@ -204,26 +206,49 @@ func GetAttendanceByYearandDivision(w http.ResponseWriter, r *http.Request) {
 				fmt.Println(err1)
 			}
 
-			SubAttendance.TotalLectures = len(TotalTheoryLectures) + len(TotalPracticalLectures)
+			SubAttendance.TotalTheoryLectures = len(TotalTheoryLectures)
+			SubAttendance.TotalPracticalLectures = len(TotalPracticalLectures)
+
 			err = dbconn.Table("student_lectures").
 				Joins("JOIN lectures ON student_lectures.lecture_id = lectures.id").
-				Where("student_lectures.attendance = true AND  student_lectures.student_id = ? AND student_lectures.subject_id = ? AND lectures.date_of_lecture BETWEEN ? AND ?", Students[i].ID, Subjects[j].ID, Report.StartDate, Report.EndDate).
-				Find(&AttendedLectures).Error
+				Where("student_lectures.attendance = true AND lectures.type = ? AND student_lectures.student_id = ? AND student_lectures.subject_id = ? AND lectures.date_of_lecture BETWEEN ? AND ?", Students[i].ID, "theory", Subjects[j].ID, Report.StartDate, Report.EndDate).
+				Find(&TheoryLectures).Error
+			err = dbconn.Table("student_lectures").
+				Joins("JOIN lectures ON student_lectures.lecture_id = lectures.id").
+				Where("student_lectures.attendance = true AND lectures.type = ? AND student_lectures.student_id = ? AND student_lectures.subject_id = ? AND lectures.date_of_lecture BETWEEN ? AND ?", Students[i].ID, "practical", Subjects[j].ID, Report.StartDate, Report.EndDate).
+				Find(&PracticalLectures).Error
 			if err != nil {
 				fmt.Println(err)
 			}
-			SubAttendance.AttendedLectures = len(AttendedLectures)
-			if SubAttendance.TotalLectures == 0 {
-				SubAttendance.Attendance = 0
-				SubAttendances = append(SubAttendances, SubAttendance.Attendance)
+			SubAttendance.TheoryLectures = len(PracticalLectures)
+			SubAttendance.PracticalLectures = len(PracticalLectures)
+			if SubAttendance.TotalTheoryLectures == 0 {
+				SubAttendance.TheoryAttendance = 0
+				SubAttendances = append(SubAttendances, SubAttendance.TheoryAttendance)
 				StudentReport.SubjectAttendance = append(StudentReport.SubjectAttendance, SubAttendance)
 			} else {
-				if SubAttendance.TotalLectures != 0 {
-					SubAttendance.Attendance = (float64(SubAttendance.AttendedLectures) / float64(SubAttendance.TotalLectures)) * 100
+				if SubAttendance.TotalTheoryLectures != 0 {
+					SubAttendance.TheoryAttendance = (float64(SubAttendance.TheoryLectures) / float64(SubAttendance.TotalTheoryLectures)) * 100
 				} else {
-					SubAttendance.Attendance = 100
+					SubAttendance.TheoryAttendance = 0
+					SubAttendance.PracticalAttendance = 0
 				}
-				SubAttendances = append(SubAttendances, SubAttendance.Attendance)
+				SubAttendances = append(SubAttendances, SubAttendance.TheoryAttendance)
+				StudentReport.SubjectAttendance = append(StudentReport.SubjectAttendance, SubAttendance)
+			}
+
+			if SubAttendance.TotalPracticalLectures == 0 {
+				SubAttendance.PracticalAttendance = 0
+				SubAttendances = append(SubAttendances, SubAttendance.PracticalAttendance)
+				StudentReport.SubjectAttendance = append(StudentReport.SubjectAttendance, SubAttendance)
+			} else {
+				if SubAttendance.TotalPracticalLectures != 0 {
+					SubAttendance.PracticalAttendance = (float64(SubAttendance.PracticalLectures) / float64(SubAttendance.TotalPracticalLectures)) * 100
+				} else {
+					SubAttendance.PracticalAttendance = 0
+					SubAttendance.PracticalAttendance = 0
+				}
+				SubAttendances = append(SubAttendances, SubAttendance.PracticalAttendance)
 				StudentReport.SubjectAttendance = append(StudentReport.SubjectAttendance, SubAttendance)
 			}
 		}
@@ -244,7 +269,7 @@ func GetAttendanceByYearandDivision(w http.ResponseWriter, r *http.Request) {
 		}
 		ActiveSubjects := 0
 		for m := 0; m < len(SubjectMap); m++ {
-			if StudentReport.SubjectAttendance[SubjectMap[m]].TotalLectures != 0 {
+			if StudentReport.SubjectAttendance[SubjectMap[m]].TotalTheoryLectures != 0 {
 				ActiveSubjects++
 			}
 		}
