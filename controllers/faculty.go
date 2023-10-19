@@ -38,7 +38,7 @@ func GetFacultyByID(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	params := mux.Vars(r)
 	var faculty database.Faculty
-	err := dbconn.Where("id = ?", params["id"]).First(&faculty).Error
+	err := dbconn.Where("s_api_d = ?", params["id"]).First(&faculty).Error
 	fmt.Println(faculty)
 	if err != nil {
 		json.NewEncoder(w).Encode("Invalid ID")
@@ -62,11 +62,10 @@ func DeleteFaculty(w http.ResponseWriter, r *http.Request) {
 }
 
 func UpdateFaculty(w http.ResponseWriter, r *http.Request) {
-
 	w.Header().Set("Content-Type", "application/json")
 	params := mux.Vars(r)
 	var faculty database.Faculty
-	err := dbconn.Where("id = ?", params["id"]).First(&faculty).Error
+	err := dbconn.Where("s_api_d = ?", params["id"]).First(&faculty).Error
 	if err != nil {
 		json.NewEncoder(w).Encode("Invalid ID")
 	}

@@ -174,6 +174,7 @@ func GetAttendanceByYearandDivision(w http.ResponseWriter, r *http.Request) {
 		StudentReport.SAPID = Students[i].SAPID
 		StudentReport.StudentName = Students[i].Name
 		StudentReport.Subjects = Students[i].Subjects
+
 		for j := 0; j < len(Subjects); j++ {
 
 			var SubAttendance SubjectAttendance
