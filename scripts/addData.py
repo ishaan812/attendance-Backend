@@ -7,13 +7,10 @@ from csv import DictReader
 
 def get_db_conn():
     conn = psycopg2.connect(
-        dbname='defaultdb',
-        user='avnadmin',
-        password='AVNS_SZf2jU48gnbwNRB3Tyx',
-        host='attendance-management-system-ishaan-3928.aivencloud.com',
-        port='14449',
-        sslmode='require'
-        ) # Postgres password
+        host="localhost",
+        database="attendance-db",
+        user="postgres",  # Replace postgres user name
+        password="8007")  # Postgres password
     return conn
 
 def cleanup_all_tables(db_conn, table_list):
@@ -47,18 +44,18 @@ def add_data_to_database(record, table_name):
 
 
 def read_csv():
-    table_name = 'students'
-    with open(table_name+'.csv', 'r', encoding='utf-8-sig') as file:
-        dict_reader = DictReader(file)
-        records = list(dict_reader)
-        # Remove the BOM character from the first column name
-        column_names = [name.lstrip('\ufeff')
-                        for name in dict_reader.fieldnames]
-        for record in records:
-            # Remove the BOM character from the first key in each record
-            record = {key.lstrip('\ufeff'): val.strip()
-                      for key, val in record.items()}
-            add_data_to_database(record, table_name)
+    # table_name = 'students'
+    table_names = ['subjects','students','faculties','time_table_entries']
+    for table_name in table_names:
+        with open(table_name+'.csv', 'r', encoding='utf-8-sig') as file:
+            dict_reader = DictReader(file)
+            records = list(dict_reader)
+            # Remove the BOM character from the first column name
+            for record in records:
+                # Remove the BOM character from the first key in each record
+                record = {key.lstrip('\ufeff'): val.strip()
+                        for key, val in record.items()}
+                add_data_to_database(record, table_name)
 
 if __name__ == "__main__":
     db_conn = get_db_conn()
