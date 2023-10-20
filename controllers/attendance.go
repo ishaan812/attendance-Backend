@@ -217,25 +217,35 @@ func GetAttendanceByYearandDivision(w http.ResponseWriter, r *http.Request) {
 				Joins("JOIN lectures ON student_lectures.lecture_id = lectures.id").
 				Where("student_lectures.attendance = true  AND student_lectures.student_id = ? AND lectures.type = ? AND student_lectures.subject_id = ? AND lectures.date_of_lecture BETWEEN ? AND ?", Students[i].ID, "theory", Subjects[j].ID, Report.StartDate, Report.EndDate).
 				Find(&TheoryLectures).Error
-			err = dbconn.Table("student_lectures").
+			err2 := dbconn.Table("student_lectures").
 				Joins("JOIN lectures ON student_lectures.lecture_id = lectures.id").
 				Where("student_lectures.attendance = true  AND student_lectures.student_id = ? AND lectures.type = ? AND student_lectures.subject_id = ? AND lectures.date_of_lecture BETWEEN ? AND ?", Students[i].ID, "practical", Subjects[j].ID, Report.StartDate, Report.EndDate).
 				Find(&PracticalLectures).Error
+
 			if err != nil {
 				fmt.Println(err)
 			}
-			SubAttendance.TheoryLectures = len(PracticalLectures)
+
+			if err2 != nil {
+				fmt.Println(err)
+			}
+
+			SubAttendance.TheoryLectures = len(TheoryLectures)
 			SubAttendance.PracticalLectures = len(PracticalLectures)
 			if SubAttendance.TotalTheoryLectures == 0 {
+
 				SubAttendance.TheoryAttendance = 0
 			} else {
+
 				SubAttendance.TheoryAttendance = (float64(SubAttendance.TheoryLectures) / float64(SubAttendance.TotalTheoryLectures)) * 100
 			}
 			SubAttendances = append(SubAttendances, SubAttendance.TheoryAttendance)
 
 			if SubAttendance.TotalPracticalLectures == 0 {
+
 				SubAttendance.PracticalAttendance = 0
 			} else {
+
 				SubAttendance.PracticalAttendance = (float64(SubAttendance.PracticalLectures) / float64(SubAttendance.TotalPracticalLectures)) * 100
 			}
 			SubAttendances = append(SubAttendances, SubAttendance.PracticalAttendance)
@@ -253,7 +263,7 @@ func GetAttendanceByYearandDivision(w http.ResponseWriter, r *http.Request) {
 				}
 			}
 		}
-		fmt.Println(SubjectMap)
+
 		for k := 0; k < len(SubjectMap); k++ {
 			res += SubAttendances[SubjectMap[k]]
 		}
