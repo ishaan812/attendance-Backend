@@ -161,7 +161,7 @@ func GetAttendanceByYearandDivision(w http.ResponseWriter, r *http.Request) {
 	var Report DivisionReport
 	Report.Year = ClassAttendanceRequest.Year
 	Report.Division = ClassAttendanceRequest.Division
-	Report.Subjects = SubjectCodes
+	Report.Subjects = SubjectNames
 	Report.StartDate, err = time.Parse("2006-01-02", ClassAttendanceRequest.StartDate)
 	if err != nil {
 		http.Error(w, "Invalid start date format", http.StatusBadRequest)
@@ -181,7 +181,6 @@ func GetAttendanceByYearandDivision(w http.ResponseWriter, r *http.Request) {
 		StudentReport.Subjects = Students[i].Subjects
 
 		for j := 0; j < len(Subjects); j++ {
-
 			var SubAttendance SubjectAttendance
 			SubAttendance.SubjectName = Subjects[j].Name
 			SubAttendance.SubjectCode = Subjects[j].ID
@@ -239,41 +238,45 @@ func GetAttendanceByYearandDivision(w http.ResponseWriter, r *http.Request) {
 
 				SubAttendance.TheoryAttendance = (float64(SubAttendance.TheoryLectures) / float64(SubAttendance.TotalTheoryLectures)) * 100
 			}
-			SubAttendances = append(SubAttendances, SubAttendance.TheoryAttendance)
 
 			if SubAttendance.TotalPracticalLectures == 0 {
-
 				SubAttendance.PracticalAttendance = 0
 			} else {
-
 				SubAttendance.PracticalAttendance = (float64(SubAttendance.PracticalLectures) / float64(SubAttendance.TotalPracticalLectures)) * 100
 			}
-			SubAttendances = append(SubAttendances, SubAttendance.PracticalAttendance)
+
+			SubAttendances = append(SubAttendances, (SubAttendance.TheoryAttendance+SubAttendance.PracticalAttendance)/2)
 			StudentReport.SubjectAttendance = append(StudentReport.SubjectAttendance, SubAttendance)
 
 		}
 		var res float64
 		var SubjectMap []int
+
 		// Array of Subattendences
 		// fmt.Println(Students[i].Subjects)
 		for z := 0; z < len(Students[i].Subjects); z++ {
 			for y := 0; y < len(SubjectCodes); y++ {
 				if Students[i].Subjects[z] == SubjectCodes[y] {
 					SubjectMap = append(SubjectMap, y)
+
 				}
 			}
 		}
-
+		fmt.Println(SubjectMap)
 		for k := 0; k < len(SubjectMap); k++ {
+
 			res += SubAttendances[SubjectMap[k]]
+			fmt.Println(SubAttendances)
 		}
+
 		ActiveSubjects := 0
 		for m := 0; m < len(SubjectMap); m++ {
-			if StudentReport.SubjectAttendance[SubjectMap[m]].TotalTheoryLectures != 0 {
+			if StudentReport.SubjectAttendance[SubjectMap[m]].TotalTheoryLectures != 0 || StudentReport.SubjectAttendance[SubjectMap[m]].TotalPracticalLectures != 0 {
 				ActiveSubjects++
 			}
 		}
 		if len(Subjects) != 0 && ActiveSubjects != 0 {
+			fmt.Println(float64(ActiveSubjects))
 			StudentReport.GrandAttendance = res / float64(ActiveSubjects)
 			if StudentReport.GrandAttendance < 75 {
 				StudentReport.Status = "Defaulter"
