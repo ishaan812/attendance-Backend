@@ -245,7 +245,17 @@ func GetAttendanceByYearandDivision(w http.ResponseWriter, r *http.Request) {
 				SubAttendance.PracticalAttendance = (float64(SubAttendance.PracticalLectures) / float64(SubAttendance.TotalPracticalLectures)) * 100
 			}
 
-			SubAttendances = append(SubAttendances, (SubAttendance.TheoryAttendance+SubAttendance.PracticalAttendance)/2)
+			if SubAttendance.TotalTheoryLectures == 0 && SubAttendance.TotalPracticalLectures == 0 {
+				SubAttendances = append(SubAttendances, 0)
+			} else if SubAttendance.TotalTheoryLectures == 0 && SubAttendance.TotalPracticalLectures != 0 {
+				SubAttendances = append(SubAttendances, SubAttendance.PracticalAttendance)
+			} else if SubAttendance.TotalTheoryLectures != 0 && SubAttendance.TotalPracticalLectures == 0 {
+				SubAttendances = append(SubAttendances, SubAttendance.TheoryAttendance)
+			} else {
+				// SubAttendances = append(SubAttendances, (((float64(SubAttendance.TheoryLectures)/float64(SubAttendance.TotalTheoryLectures))+(float64(SubAttendance.PracticalLectures)/float64(SubAttendance.TotalPracticalLectures)))/(float64(SubAttendance.TotalTheoryLectures)+float64(SubAttendance.TotalPracticalLectures)))*100)
+				SubAttendances = append(SubAttendances, ((float64(SubAttendance.TheoryLectures+SubAttendance.PracticalLectures))/float64(SubAttendance.TotalTheoryLectures+SubAttendance.TotalPracticalLectures))*100)
+			}
+
 			StudentReport.SubjectAttendance = append(StudentReport.SubjectAttendance, SubAttendance)
 
 		}
