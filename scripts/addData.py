@@ -47,7 +47,7 @@ def add_data_to_database(record, table_name):
 
 
 def read_csv():
-    table_name = 'students'
+    table_name = 'time_table_entries'
     with open(table_name+'.csv', 'r', encoding='utf-8-sig') as file:
         dict_reader = DictReader(file)
         records = list(dict_reader)
@@ -62,5 +62,5 @@ def read_csv():
 
 if __name__ == "__main__":
     db_conn = get_db_conn()
-    # cleanup_all_tables(db_conn, ["time_table_entries"])
+    # cleanup_all_tables(db_conn, ["students","faculties","time_table_entries","student_lectures","subjects","lectures"])
     read_csv()
