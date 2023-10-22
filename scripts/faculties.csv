@@ -1,19 +1,18 @@
-﻿id,s_api_d,name,email,password,subjects
-664a0d49-edf6-4715-950d-1a8dd01fb403,99901,harshal dalvi,harshal.dalvi@djsce.ac.in,1234,"{""DJ19ITC503"", ""DJ19ITC702""}"
-b664ad75-3773-406e-8221-d0a933a52c4f,99902,vinaya sawant,vinaya.sawant@djsce.ac.in,1234,"{""DJ19ITC503""}"
-566cd371-76b8-4b67-997d-d6ffe8781be4,99903,neha katre,neha.katre@djsce.ac.in,1234,"{""DJ19ITEC5013""}"
-e3c144c4-ab4f-4f5b-97d7-5ae4aa1a0dab,99904,arjun jaiswal,arjun.jaiswal@djsce.ac.in,1234,"{""DJ19ITC701""}"
-8065a250-0d80-49fd-9452-7cb70e6b47ad,99905,neha agarwal,neha.agarwal@djsce.ac.in,1234,"{""DJ19ITC502""}"
-664a0d49-edf6-4715-950d-1a8dd01fb404,99906,anushree patil,anushree.patil@djsce.ac.in,1234,"{""DJ19ITC702""}"
-664a0d49-edf6-4715-950d-1a8dd01fb405,99907,prachi satam,prachi.satam@djsce.ac.in,1234,"{""DJ19ITEC5013"",""DJ19ITC504""}"
-664a0d49-edf6-4715-950d-1a8dd01fb406,99908,monika mangla,monika.mangla@djsce.ac.in,1234,"{""DJ19ITC502""}"
-664a0d49-edf6-4715-950d-1a8dd01fb407,99909,stevina correia,stevina.correia@djsce.ac.in,1234,"{""DJ19ITC501""}"
-664a0d49-edf6-4715-950d-1a8dd01fb408,99910,richa sharma,richa.sharma@djsce.ac.in,1234,"{""DJ19ITC501"",""DJ19ITEC5013""}"
-664a0d49-edf6-4715-950d-1a8dd01fb409,99911,shirley matthews,shirley.matthews@djsce.ac.in,1234,"{""DJ19ITC505""}"
-664a0d49-edf6-4715-950d-1a8dd01fb410,99912,sweedle machado,sweedle.machado@djsce.ac.in,1234,"{""DJ19ITC504"",""DJ19ITC701""}"
-664a0d49-edf6-4715-950d-1a8dd01fb411,99913,savyasaachi pandit,savyasaachipandit@djsce.ac.in,1234,"{""DJ19ITC701"",""DJ19ITC702""}"
-664a0d49-edf6-4715-950d-1a8dd01fb412,99914,abhijit joshi,abhijit.joshi@djsce.ac.in,1234,"{""DJ19ITEC5013""}"
-664a0d49-edf6-4715-950d-1a8dd01fb413,99915,ramchandra mangrulkar,ramchandra.mangrulkar@djsce.ac.in,1234,"{""DJ19ITC501""}"
-664a0d49-edf6-4715-950d-1a8dd01fb414,99916,aparajita philips,aparajita.philips@djsce.ac.in,1234,"{""DJ19ITC505""}"
-664a0d49-edf6-4715-950d-1a8dd01fb415,99917,super user,bhavya@niti.ai,1234,"{""DJ19ITC503"", ""DJ19ITC702"",""DJ19ITEC5013"", ""DJ19ITC701"",""DJ19ITC502"",""DJ19ITC504"",""DJ19ITC501"",""DJ19ITC505""}"
-
+﻿id,s_api_d,name,email,password,subjects,role
+664a0d49-edf6-4715-950d-1a8dd01fb403,99901,harshal dalvi,harshal.dalvi@djsce.ac.in,1234,"{""DJ19ITC503"", ""DJ19ITC702""}",teacher
+b664ad75-3773-406e-8221-d0a933a52c4f,99902,vinaya sawant,vinaya.sawant@djsce.ac.in,1234,"{""DJ19ITC503""}",admin
+566cd371-76b8-4b67-997d-d6ffe8781be4,99903,neha katre,neha.katre@djsce.ac.in,1234,"{""DJ19ITEC5013""}",teacher
+e3c144c4-ab4f-4f5b-97d7-5ae4aa1a0dab,99904,arjun jaiswal,arjun.jaiswal@djsce.ac.in,1234,"{""DJ19ITC701""}",teacher
+8065a250-0d80-49fd-9452-7cb70e6b47ad,99905,neha agarwal,neha.agarwal@djsce.ac.in,1234,"{""DJ19ITC502""}",teacher
+664a0d49-edf6-4715-950d-1a8dd01fb404,99906,anushree patil,anushree.patil@djsce.ac.in,1234,"{""DJ19ITC702""}",teacher
+664a0d49-edf6-4715-950d-1a8dd01fb405,99907,prachi satam,prachi.satam@djsce.ac.in,1234,"{""DJ19ITEC5013"",""DJ19ITC504""}",teacher
+664a0d49-edf6-4715-950d-1a8dd01fb406,99908,monika mangla,monika.mangla@djsce.ac.in,1234,"{""DJ19ITC502""}",teacher
+664a0d49-edf6-4715-950d-1a8dd01fb407,99909,stevina correia,stevina.correia@djsce.ac.in,1234,"{""DJ19ITC501""}",teacher
+664a0d49-edf6-4715-950d-1a8dd01fb408,99910,richa sharma,richa.sharma@djsce.ac.in,1234,"{""DJ19ITC501"",""DJ19ITEC5013""}",teacher
+664a0d49-edf6-4715-950d-1a8dd01fb409,99911,shirley matthews,shirley.matthews@djsce.ac.in,1234,"{""DJ19ITC505""}",teacher
+664a0d49-edf6-4715-950d-1a8dd01fb410,99912,sweedle machado,sweedle.machado@djsce.ac.in,1234,"{""DJ19ITC504"",""DJ19ITC701""}",teacher
+664a0d49-edf6-4715-950d-1a8dd01fb411,99913,savyasaachi pandit,savyasaachipandit@djsce.ac.in,1234,"{""DJ19ITC701"",""DJ19ITC702""}",teacher
+664a0d49-edf6-4715-950d-1a8dd01fb412,99914,abhijit joshi,abhijit.joshi@djsce.ac.in,1234,"{""DJ19ITEC5013""}",teacher
+664a0d49-edf6-4715-950d-1a8dd01fb413,99915,ramchandra mangrulkar,ramchandra.mangrulkar@djsce.ac.in,1234,"{""DJ19ITC501""}",teacher
+664a0d49-edf6-4715-950d-1a8dd01fb414,99916,aparajita philips,aparajita.philips@djsce.ac.in,1234,"{""DJ19ITC505""}",teacher
+664a0d49-edf6-4715-950d-1a8dd01f9999,99999,ADMIN ADMIN,bhavya.gor9999@gmail.com,hojayega,"{""DJ19ITC501"",""DJ19ITC502"","DJ19ITEC5013"",""DJ19ITC503"",""DJ19ITC701"",""DJ19ITC702"",""DJ19ITC505"",""DJ19ITC504""}",admin
