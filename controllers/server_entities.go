@@ -3,6 +3,7 @@ package controllers
 import (
 	"time"
 
+	"github.com/gofrs/uuid"
 	"github.com/golang-jwt/jwt"
 )
 
@@ -47,12 +48,13 @@ type DivisionReport struct {
 }
 
 type ClassAttendanceReq struct {
-	Year      string `json:"year"`
-	Division  string `json:"division"`
-	Batch     int    `json:"batch"`
-	Type      string `json:"type"`
-	StartDate string `json:"start_date"`
-	EndDate   string `json:"end_date"`
+	Year      string    `json:"year"`
+	Division  string    `json:"division"`
+	Batch     int       `json:"batch"`
+	Type      string    `json:"type"`
+	StartDate string    `json:"start_date"`
+	EndDate   string    `json:"end_date"`
+	TeacherId uuid.UUID `json:"teacher_id"`
 }
 
 type SubjectAttendance struct {

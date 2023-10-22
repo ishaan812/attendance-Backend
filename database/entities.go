@@ -35,6 +35,7 @@ type Faculty struct {
 	Email      string         `json:"email"`
 	Department string         `json:"department"`
 	Subjects   pq.StringArray `gorm:"type:varchar(255)[]" json:"subjects,omitempty"`
+	Role       string         `json:"role"`
 }
 
 type Subject struct {

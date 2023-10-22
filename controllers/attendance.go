@@ -135,22 +135,42 @@ func GetLectureAttendance(w http.ResponseWriter, r *http.Request) {
 func GetAttendanceByYearandDivision(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	var err error
+	var err1 error
 	var ClassAttendanceRequest ClassAttendanceReq
 	json.NewDecoder(r.Body).Decode(&ClassAttendanceRequest)
 	var Students []database.Student
 	var Subjects []database.Subject
+	var faculty database.Faculty
 
-	//get list of students
+	err1 = dbconn.Where("id = ?", ClassAttendanceRequest.TeacherId).First(&faculty).Error
+
+	if err1 != nil {
+		json.NewEncoder(w).Encode("Cant Find the faculty")
+	} else if faculty.Role == "teacher" {
+		subjectCodes := make([]string, len(faculty.Subjects))
+		for i, subject := range faculty.Subjects {
+			subjectCodes[i] = subject
+		}
+
+		err = dbconn.Where("year = ? AND ID IN (?)", ClassAttendanceRequest.Year, subjectCodes).Find(&Subjects).Error
+		if err != nil {
+			json.NewEncoder(w).Encode("Wrong year or division")
+			return
+		}
+	} else {
+		err = dbconn.Where("year = ?", ClassAttendanceRequest.Year).Find(&Subjects).Error
+		if err != nil {
+			json.NewEncoder(w).Encode("Wrong year")
+			return
+		}
+	}
+
 	err = dbconn.Where("year = ? AND division = ?", ClassAttendanceRequest.Year, ClassAttendanceRequest.Division).Find(&Students).Error
 	if err != nil {
 		json.NewEncoder(w).Encode("Wrong year or division")
 	}
-	//get list of subjects
-	err = dbconn.Where("year = ?", ClassAttendanceRequest.Year).Find(&Subjects).Error
-	if err != nil {
-		json.NewEncoder(w).Encode("Wrong year")
-	}
 
+	//get list of subjects
 	SubjectNames := []string{}
 	for i := 0; i < len(Subjects); i++ { //alternative
 		SubjectNames = append(SubjectNames, Subjects[i].Name)
@@ -161,12 +181,12 @@ func GetAttendanceByYearandDivision(w http.ResponseWriter, r *http.Request) {
 	Report.Division = ClassAttendanceRequest.Division
 	Report.Subjects = SubjectNames
 
-	Report.StartDate, err = time.Parse("2023-01-01", ClassAttendanceRequest.StartDate)
+	Report.StartDate, err = time.Parse("2006-01-02", ClassAttendanceRequest.StartDate)
 	if err != nil {
 		http.Error(w, "Invalid start date format", http.StatusBadRequest)
 		return
 	}
-	Report.EndDate, err = time.Parse("2024-01-01", ClassAttendanceRequest.EndDate)
+	Report.EndDate, err = time.Parse("2006-01-02", ClassAttendanceRequest.EndDate)
 	if err != nil {
 		http.Error(w, "Invalid end date format", http.StatusBadRequest)
 		return
