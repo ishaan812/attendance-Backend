@@ -150,24 +150,23 @@ func GetAttendanceByYearandDivision(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		json.NewEncoder(w).Encode("Wrong year")
 	}
-	SubjectCodes := []string{}
-	for i := 0; i < len(Subjects); i++ {
-		SubjectCodes = append(SubjectCodes, Subjects[i].ID)
-	}
+
 	SubjectNames := []string{}
-	for i := 0; i < len(Subjects); i++ {
+	for i := 0; i < len(Subjects); i++ { //alternative
 		SubjectNames = append(SubjectNames, Subjects[i].Name)
 	}
+
 	var Report DivisionReport
 	Report.Year = ClassAttendanceRequest.Year
 	Report.Division = ClassAttendanceRequest.Division
 	Report.Subjects = SubjectNames
-	Report.StartDate, err = time.Parse("2006-01-02", ClassAttendanceRequest.StartDate)
+
+	Report.StartDate, err = time.Parse("2023-01-01", ClassAttendanceRequest.StartDate)
 	if err != nil {
 		http.Error(w, "Invalid start date format", http.StatusBadRequest)
 		return
 	}
-	Report.EndDate, err = time.Parse("2006-01-02", ClassAttendanceRequest.EndDate)
+	Report.EndDate, err = time.Parse("2024-01-01", ClassAttendanceRequest.EndDate)
 	if err != nil {
 		http.Error(w, "Invalid end date format", http.StatusBadRequest)
 		return
@@ -265,14 +264,14 @@ func GetAttendanceByYearandDivision(w http.ResponseWriter, r *http.Request) {
 		// Array of Subattendences
 		// fmt.Println(Students[i].Subjects)
 		for z := 0; z < len(Students[i].Subjects); z++ {
-			for y := 0; y < len(SubjectCodes); y++ {
-				if Students[i].Subjects[z] == SubjectCodes[y] {
+			for y := 0; y < len(SubjectNames); y++ {
+				if Students[i].Subjects[z] == SubjectNames[y] {
 					SubjectMap = append(SubjectMap, y)
 
 				}
 			}
 		}
-		fmt.Println(SubjectMap)
+
 		for k := 0; k < len(SubjectMap); k++ {
 
 			res += SubAttendances[SubjectMap[k]]
