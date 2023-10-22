@@ -1,2 +1,10 @@
 day,start_time,end_time,type,subject_id,division,batch,faculty_id
-Friday,10:00 AM,11:00 AM,theory,DJ19ITC503,I1,1,664a0d49-edf6-4715-950d-1a8dd01fb420
+Tuesday,12:30 PM,2:30 PM,practical,DJS22ITC307,I1,1,664a0d49-edf6-4715-950d-1a8dd01fb420
+Thursday,10:00 AM,12:00 PM,practical,DJS22ITC307,I1,2,664a0d49-edf6-4715-950d-1a8dd01fb420
+Monday,3:30 PM,5:30 PM,practical,DJS22ITC307,I3,2,664a0d49-edf6-4715-950d-1a8dd01fb420
+Monday,1:00 PM,2:00 PM,theory,DJS22ITC305,I3,,664a0d49-edf6-4715-950d-1a8dd01fb420
+Thursday,12:30 PM,1:30 PM,theory,DJS22ITC305,I3,,664a0d49-edf6-4715-950d-1a8dd01fb420
+Saturday,9:00 AM,10:00 AM,theory,DJS22ITC305,I3,,664a0d49-edf6-4715-950d-1a8dd01fb420
+Thursday,10:00 AM,12:00 PM,practical,DJS22ITC305,I3,2,664a0d49-edf6-4715-950d-1a8dd01fb420
+Friday,10:00 AM,12:00 PM,practical,DJS22ITC305,I3,2,664a0d49-edf6-4715-950d-1a8dd01fb420
+Saturday,12:30 PM,2:30 PM,practical,DJS22ITC305,I3,1,664a0d49-edf6-4715-950d-1a8dd01fb420
