@@ -175,6 +175,10 @@ func GetAttendanceByYearandDivision(w http.ResponseWriter, r *http.Request) {
 	for i := 0; i < len(Subjects); i++ { //alternative
 		SubjectNames = append(SubjectNames, Subjects[i].Name)
 	}
+	SubjectCodes := []string{}
+	for i := 0; i < len(Subjects); i++ { //alternative
+		SubjectCodes = append(SubjectCodes, Subjects[i].ID)
+	}
 
 	var Report DivisionReport
 	Report.Year = ClassAttendanceRequest.Year
@@ -284,8 +288,9 @@ func GetAttendanceByYearandDivision(w http.ResponseWriter, r *http.Request) {
 		// Array of Subattendences
 		// fmt.Println(Students[i].Subjects)
 		for z := 0; z < len(Students[i].Subjects); z++ {
-			for y := 0; y < len(SubjectNames); y++ {
-				if Students[i].Subjects[z] == SubjectNames[y] {
+			for y := 0; y < len(SubjectCodes); y++ {
+				if Students[i].Subjects[z] == SubjectCodes[y] {
+
 					SubjectMap = append(SubjectMap, y)
 
 				}
@@ -293,9 +298,7 @@ func GetAttendanceByYearandDivision(w http.ResponseWriter, r *http.Request) {
 		}
 
 		for k := 0; k < len(SubjectMap); k++ {
-
 			res += SubAttendances[SubjectMap[k]]
-			fmt.Println(SubAttendances)
 		}
 
 		ActiveSubjects := 0
