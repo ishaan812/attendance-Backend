@@ -69,16 +69,21 @@ func GetLectureByID(w http.ResponseWriter, r *http.Request) {
 }
 
 func DeleteLecture(w http.ResponseWriter, r *http.Request) {
-
 	w.Header().Set("Content-Type", "application/json")
 	var lecture database.Lecture
+	var StudentLecture database.StudentLecture
 	params := mux.Vars(r)
 	err := dbconn.Where("id = ?", params["id"]).First(&lecture).Error
+	err1 := dbconn.Where("lecture_id = ?", params["id"]).Delete(&StudentLecture).Error
+
+	if err1 != nil {
+		json.NewEncoder(w).Encode("Invalid ID")
+	}
 	if err != nil {
 		json.NewEncoder(w).Encode("Invalid ID")
 	} else {
 		dbconn.Delete(&lecture)
-		json.NewEncoder(w).Encode("Student Deleted")
+		json.NewEncoder(w).Encode("Lecture Deleted")
 	}
 }
 
